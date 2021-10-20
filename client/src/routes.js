@@ -14,6 +14,7 @@ import Message from './pages/Message';
 import ViewProduct from './pages/ViewProduct';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
+import MyAccount from './pages/MyAccount';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function Router() {
         // { path: ':token', element: <User /> },
         { path: 'mycart', element: <Cart /> },
         { path: 'myorders', element: <Orders /> },
+        { path: 'myaccount', element: <MyAccount /> },
         { path: 'products', element: <Products /> },
         { path: 'products/:id', element: <ViewProduct /> },
         { path: 'blog', element: <Blog /> }
