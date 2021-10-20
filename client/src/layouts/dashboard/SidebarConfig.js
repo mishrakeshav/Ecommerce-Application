@@ -29,7 +29,7 @@ const sidebarConfig = [
   },
   {
     title: 'My Cart',
-    path: '/dashboard/mycart',
+    path: '/dashboard/MyCart',
     icon: getIcon(fileTextFill)
   },
   {
