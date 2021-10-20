@@ -52,6 +52,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     item_list = serializers.SerializerMethodField()
+    # TODO: total Price, total Items
 
     class Meta:
         model = Order
@@ -69,12 +70,22 @@ class OrderSerializer(serializers.ModelSerializer):
         return order_items.values()
 
 
+class OrderItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = (
+            'product',
+            'quantity',
+        )
+
+
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = (
             'product',
             'quantity',
+            'price'
         )
 
 

@@ -1,20 +1,18 @@
+from django.db import models
 from django.shortcuts import get_object_or_404, render
-from rest_framework import generics, permissions
+from django.views import generic
+from rest_framework import generics, permissions, filters
 from rest_framework import response
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
-from .models import (Cart, Product, Order, OrderItem)
-from .serializers import (
-    ProductSerializer, ProductDetailSerializer, OrderSerializer, OrderItemSerializer)
-from rest_framework import filters
 import django_filters.rest_framework
 
-from .models import (Category, Product, Order)
+from .models import (Category, Product, Order, OrderItem, Cart)
 from .serializers import (
     ProductSerializer,
     ProductDetailSerializer,
     OrderSerializer,
+    OrderItemSerializer,
+    OrderItemCreateSerializer,
     CategorySerializer
 )
 
@@ -28,11 +26,11 @@ class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filterset_fields = {
-        'name' : ['contains'],
-        'price' : ['exact', 'gte', 'lte'],
-        'category' : ['exact'],
-        'model_number' : ['contains'],
-        'other' : ['contains']
+        'name': ['contains'],
+        'price': ['exact', 'gte', 'lte'],
+        'category': ['exact'],
+        'model_number': ['contains'],
+        'other': ['contains']
     }
     filter_backends = [
         django_filters.rest_framework.DjangoFilterBackend,
@@ -41,8 +39,6 @@ class ProductList(generics.ListAPIView):
     search_fields = ['$name', '$category',
                      '$model_number', '$other']
     ordering_fields = ['price', ]
-
-
 
 
 class OrderDetail(generics.RetrieveUpdateAPIView):
@@ -83,25 +79,43 @@ class OrderList(generics.ListCreateAPIView):
         )
 
 
-class OrderItemCreate(generics.CreateAPIView):
+class OrderItemList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
+    serializer_class = OrderItemCreateSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        order_item = list(map(
+            lambda cart: cart.order_item,
+            Cart.objects.filter(user=user).all()
+        ))
+        return order_item
 
     def post(self, request, *args, **kwargs):
         data = request.data
+        product = get_object_or_404(Product, pk=data.get('product'))
 
         order_item = OrderItem.objects.create(
-            product=get_object_or_404(Product, pk=data.get('product')),
+            product=product,
             quantity=int(data.get('quantity')),
-            price=int(data.get('price')),
+            price=product.price,
         )
 
         Cart.objects.create(user=request.user, order_item=order_item)
 
         return Response(
-            data=OrderItemSerializer(order_item).data
+            data=OrderItemCreateSerializer(order_item).data
         )
+
+
+class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+
+    # TODO: Updates for the price
+
 
 class CategoryList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
