@@ -10,11 +10,15 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_per_page = 20
 
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     list_display_links = ('name',)
     search_fields = ('name',)
     list_per_page = 20
 
+
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Category, CategoryAdmin)
+admin.site.register(models.Order)
+admin.site.register(models.OrderItem)
