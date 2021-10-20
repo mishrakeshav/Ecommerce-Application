@@ -34,7 +34,7 @@ const sidebarConfig = [
   },
   {
     title: 'My Orders',
-    path: '/dashboard/myorders',
+    path: '/dashboard/CartNew',
     icon: getIcon(fileTextFill)
   },
   {
