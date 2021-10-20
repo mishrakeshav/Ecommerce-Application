@@ -2,6 +2,7 @@ from django.db.models import fields
 from rest_framework import serializers
 from .models import Order, OrderItem, Product, Category
 from django.shortcuts import get_object_or_404
+from django.forms.models import model_to_dict
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -52,7 +53,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     item_list = serializers.SerializerMethodField()
-    # TODO: total Price, total Items
+    total_price = serializers.SerializerMethodField()
+    total_items = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -62,12 +64,41 @@ class OrderSerializer(serializers.ModelSerializer):
             'completed',
             'shipping_address',
             'item_list',
+            'total_price',
+            'total_items'
         )
 
     def get_item_list(self, obj):
         order_id = obj.id
         order_items = OrderItem.objects.filter(order=order_id).all()
-        return order_items.values()
+        order_items = order_items.values()
+
+        for item in order_items:
+            product = get_object_or_404(
+                Product, pk=item['product_id'])
+
+            product = model_to_dict(
+                product,
+                fields=[field.name for field in product._meta.fields])
+
+            for field in product.keys():
+                if 'image' in field:
+                    product[field] = product[field].url
+
+            item['product'] = product
+            del item['product_id']
+
+        return order_items
+
+    def get_total_price(self, obj):
+        order_id = obj.id
+        order_items = OrderItem.objects.filter(order=order_id).all()
+        return sum(item.price for item in order_items)
+
+    def get_total_items(self, obj):
+        order_id = obj.id
+        order_items = OrderItem.objects.filter(order=order_id).all()
+        return sum(item.quantity for item in order_items)
 
 
 class OrderItemCreateSerializer(serializers.ModelSerializer):
@@ -80,6 +111,8 @@ class OrderItemCreateSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product = serializers.SerializerMethodField()
+
     class Meta:
         model = OrderItem
         fields = (
@@ -87,6 +120,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'quantity',
             'price'
         )
+
+    def get_product(self, obj):
+        return get_object_or_404(Product, )
 
 
 class CategorySerializer(serializers.ModelSerializer):
