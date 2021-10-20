@@ -111,8 +111,9 @@ const Row = (props)=>{
 const Orders = () => {
     const [orders, setOrders] = useState([]);
     const fetchAllOrders = async ()=>{
+        console.log('here')
         const data = await getAllOrders();
-        console.log(data?.data);
+        console.log(data);
         setOrders(data?.data);
       }
       useEffect(()=>{
