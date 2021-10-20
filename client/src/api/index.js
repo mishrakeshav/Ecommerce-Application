@@ -53,3 +53,6 @@ export const getUserData =()=> API.get('/user/');
 export const updateUserData =(formData)=> API.put('/user/', formData);
 
 
+export const getAllOrders =(formData)=> API.get('/orders/', {params : formData});
+
+

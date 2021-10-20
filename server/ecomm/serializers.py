@@ -18,6 +18,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'company_name',
             'model_number',
             'image',
+            'other'
         )
 
     def get_category(self, obj):
@@ -44,6 +45,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'image3',
             'image4',
             'image5',
+            'other'
         )
 
 
