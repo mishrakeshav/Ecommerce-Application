@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework import permissions
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer,NewUserSerializer
 from .models import Profile
 
 
@@ -19,8 +19,10 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserCreate(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = NewUserSerializer
+
 
 
 class UserList(generics.ListAPIView):

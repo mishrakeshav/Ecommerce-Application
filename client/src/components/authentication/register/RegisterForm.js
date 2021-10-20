@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { signUp } from '../../../api/auth';
+import {toast} from 'react-toastify';
+
 
 // ----------------------------------------------------------------------
 
@@ -33,8 +36,15 @@ export default function RegisterForm() {
       password: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async () => {
+      try{
+        console.log(formik.values);
+        const data = await signUp({...formik.values, username : formik.values.email});
+        toast('You account has been created!. Please login to continue');
+      }catch(error){
+        console.log(error);
+      }
+      navigate('/login', { replace: true });
     }
   });
 
