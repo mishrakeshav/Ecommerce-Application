@@ -28,8 +28,13 @@ const sidebarConfig = [
     icon: getIcon(shoppingBagFill)
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'My Cart',
+    path: '/dashboard/mycart',
+    icon: getIcon(fileTextFill)
+  },
+  {
+    title: 'My Orders',
+    path: '/dashboard/myorders',
     icon: getIcon(fileTextFill)
   },
   {

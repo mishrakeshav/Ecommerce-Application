@@ -12,6 +12,8 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 import Message from './pages/Message';
 import ViewProduct from './pages/ViewProduct';
+import Cart from './pages/Cart';
+import Orders from './pages/Orders';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,8 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
         // { path: ':token', element: <User /> },
+        { path: 'mycart', element: <Cart /> },
+        { path: 'myorders', element: <Orders /> },
         { path: 'products', element: <Products /> },
         { path: 'products/:id', element: <ViewProduct /> },
         { path: 'blog', element: <Blog /> }

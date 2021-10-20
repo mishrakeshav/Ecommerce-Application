@@ -14,9 +14,10 @@ import ShareIcon from '@mui/icons-material/Share';
 import Barcode from 'react-barcode';
 
 const ViewProduct = () => {
+    
     return (
         <div>
-            <Grid container spacing={3}>
+            <Grid  container spacing={3} sx={{padding : '10px'}}>
                 <Grid item xs={12} sm={12} lg={12}>
                     <Typography variant="h3">Product Details : SAMSUNG Galaxy F12 (Sea Green, 64 GB)  (4 GB RAM)</Typography>
                 </Grid>
@@ -81,9 +82,7 @@ const ViewProduct = () => {
                             4400 mAh Lithium-ion Battery
                             Qualcomm Snapdragon 888 Octa-Core Processor
                         </Grid>
-                    </Grid>
-                    <Grid container spacing={3} my={1} >
-                        <Grid item xs={12} sm={12} lg={12} align="center">
+                        <Grid item xs={8} sm={8} lg={12} align="center">
                             <Barcode value="barcodenumber" />
                         </Grid>
                     </Grid>
