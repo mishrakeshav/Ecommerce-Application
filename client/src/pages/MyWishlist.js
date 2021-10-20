@@ -48,7 +48,6 @@ const Row = (props)=>{
     }else if(props.order.status == 'SH'){
         order_status = 'Shipped';
     }
-        
       
     return (
         <>
@@ -56,10 +55,10 @@ const Row = (props)=>{
             edit ? (
                 <TableRow>
                     <TableCell>{props.order?.id}</TableCell>
-                    <TableCell>IMAGE</TableCell>
-                    <TableCell>
+
+                    {/* <TableCell>
                         {props.order?.id}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                         <TextField
                             variant="outlined"
@@ -90,11 +89,12 @@ const Row = (props)=>{
             ): (
                 <TableRow>
                     <TableCell>{props.idx+1}</TableCell>
-                    {/* <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell> */}
+                    <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell>
                     <TableCell>{props.order?.id}</TableCell>
                     <TableCell>{order_status}</TableCell>
                     <TableCell>3</TableCell>
                     <TableCell>{props.order?.price}</TableCell>
+                    <TableCell>Category</TableCell>
                     <TableCell>{props.order?.shipping_address}</TableCell>
                     <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell>
                     <TableCell><Button onClick={handleDelete}>DELETE</Button></TableCell>
@@ -110,16 +110,18 @@ const Row = (props)=>{
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
-    const fetchAllOrders = async ()=>{
-        console.log('here')
-        const data = await getAllOrders();
-        console.log(data);
-        console.log(data?.data?.results);
-        setOrders(data?.data?.results);
-      }
-      useEffect(()=>{
-        fetchAllOrders();
-      },[])
+    // const fetchAllOrders = async ()=>{
+        
+    //     const data = await getAllOrders();
+    //     console.log(data?.data);
+    //     setOrders(data?.data);
+    //   }
+    // useEffect(()=>{
+    // fetchAllOrders();
+    // },[])
+
+     
+
     return (
         <CartPaper elevation={15}>
             <Grid spacing={3} container>
@@ -133,13 +135,14 @@ const Orders = () => {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell> #</TableCell>
-                                            {/* <TableCell>OrderImage</TableCell> */}
+                                            {/* <TableCell></TableCell> */}
+                                            <TableCell>Order Image</TableCell>
                                             <TableCell>Order ID</TableCell>                                      
                                             <TableCell>Order Status</TableCell>
                                             <TableCell>Total Items</TableCell>
                                             <TableCell>Total Cost</TableCell>
+                                            <TableCell> Category </TableCell>
                                             <TableCell> Shipping Address </TableCell>
-                                            <TableCell> </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>

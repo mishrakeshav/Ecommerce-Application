@@ -38,6 +38,11 @@ const sidebarConfig = [
     icon: getIcon(fileTextFill)
   },
   {
+    title: 'My Wishlist',
+    path: '/dashboard/MyWishlist',
+    icon: getIcon(fileTextFill)
+  },
+  {
     title: 'login',
     path: '/login',
     icon: getIcon(lockFill)
