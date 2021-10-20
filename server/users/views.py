@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, serializers
+from rest_framework import generics
 import django_filters.rest_framework
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from users.models import Profile
 
 
-from .serializers import UserSerializer , ProfileSerializer
+from .serializers import UserSerializer, ProfileSerializer
 
 
 class IsOwner(permissions.BasePermission):
@@ -29,37 +29,32 @@ class IsOwner(permissions.BasePermission):
             return True
 
         # Write permissions are only allowed to the owner of the snippet.
-        return obj.user == request.user 
-
-class UserDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def get_object(self, pk):
-        try:
-            return User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            raise Http404
-    
-    def get(self, request, format=None):
-        user = self.get_object(request.user.id)
-        serializer = UserSerializer(user)
-        return Response(serializer.data) 
-    
-    def put(self, request,format=None):
-        user = self.get_object(request.user.id)
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request,format=None):
-        user = self.get_object(request.user.id)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return obj.user == request.user
 
 
 class ProfileDetail(generics.RetrieveUpdateAPIView):
-    queryset = Profile.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        user_id = self.request.user.id
+        user = get_object_or_404(User, pk=user_id)
+        return user
+
+
+class UserCreate(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

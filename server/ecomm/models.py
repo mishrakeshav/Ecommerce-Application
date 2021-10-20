@@ -12,15 +12,15 @@ class Product(models.Model):
     price = models.FloatField()
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    # general parameters 
+
+    # general parameters
     category = models.ForeignKey(Category,on_delete =models.SET_NULL,blank=True,null=True)
     company_name = models.CharField(max_length=200,null=True)
     model_number = models.CharField(max_length=200,null=True)
 
     #unique parameters
     barcode_number = models.CharField(max_length=200, null=True, blank=True)
-    
+
     image = models.FileField(upload_to='products/', default='products/default.png')
     image1 = models.FileField(upload_to='products/', default='products/default.png')
     image2 = models.FileField(upload_to='products/', default='products/default.png')
