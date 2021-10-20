@@ -110,15 +110,15 @@ const Row = (props)=>{
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
-    const fetchAllOrders = async ()=>{
+    // const fetchAllOrders = async ()=>{
         
-        const data = await getAllOrders();
-        console.log(data?.data);
-        setOrders(data?.data);
-      }
-    useEffect(()=>{
-    fetchAllOrders();
-    },[])
+    //     const data = await getAllOrders();
+    //     console.log(data?.data);
+    //     setOrders(data?.data);
+    //   }
+    // useEffect(()=>{
+    // fetchAllOrders();
+    // },[])
 
      
 

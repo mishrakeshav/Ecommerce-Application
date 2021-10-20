@@ -114,7 +114,8 @@ const Orders = () => {
         console.log('here')
         const data = await getAllOrders();
         console.log(data);
-        setOrders(data?.data);
+        console.log(data?.data?.results);
+        setOrders(data?.data?.results);
       }
       useEffect(()=>{
         fetchAllOrders();

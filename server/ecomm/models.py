@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields.related import create_many_to_many_intermediary_model
 
 
 class Category(models.Model):
@@ -62,3 +63,9 @@ class OrderItem(models.Model):
     price = models.FloatField()
     order = models.ForeignKey(
         Order, on_delete=models.SET_NULL, blank=True, null=True)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    order_item = models.OneToOneField(OrderItem, on_delete=models.DO_NOTHING)
+
