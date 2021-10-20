@@ -19,6 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'company_name',
             'model_number',
             'image',
+            'other'
         )
 
     def get_category(self, obj):
@@ -45,6 +46,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'image3',
             'image4',
             'image5',
+            'other'
         )
 
 
@@ -67,6 +69,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return order_items.values()
 
 
+<<<<<<< HEAD
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
@@ -74,4 +77,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product',
             'quantity',
             'price',
+=======
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = (
+            'id',
+            'name',
+>>>>>>> b6592636cf7ef72901a269568e94e00ca5a2ea31
         )

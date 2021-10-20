@@ -6,6 +6,9 @@ from django.db.models.fields.related import create_many_to_many_intermediary_mod
 class Category(models.Model):
     name = models.CharField(max_length=200, null=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)

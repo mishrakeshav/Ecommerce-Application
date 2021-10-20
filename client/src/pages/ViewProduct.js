@@ -20,6 +20,7 @@ const ViewProduct = () => {
     let { id } = useParams();
     const fetchProduct = async ()=>{
         const data = await getProduct({id});
+        console.log(data);
         setProduct(data?.data);
     }
     useEffect(()=>{
@@ -86,11 +87,7 @@ const ViewProduct = () => {
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
                             
-                            12 GB RAM | 256 GB ROM
-                            19.3 cm (7.6 inch) QXGA+ Display
-                            12MP + 12MP + 12MP | 10MP Front Camera
-                            4400 mAh Lithium-ion Battery
-                            Qualcomm Snapdragon 888 Octa-Core Processor
+                            {product.other}
                         </Grid>
                         <Grid item xs={8} sm={8} lg={12} align="center">
                             <Barcode value={product.barcode_number} />

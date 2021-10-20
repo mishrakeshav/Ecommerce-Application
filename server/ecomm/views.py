@@ -7,6 +7,16 @@ from rest_framework.decorators import api_view
 from .models import (Cart, Product, Order, OrderItem)
 from .serializers import (
     ProductSerializer, ProductDetailSerializer, OrderSerializer, OrderItemSerializer)
+from rest_framework import filters
+import django_filters.rest_framework
+
+from .models import (Category, Product, Order)
+from .serializers import (
+    ProductSerializer,
+    ProductDetailSerializer,
+    OrderSerializer,
+    CategorySerializer
+)
 
 
 class ProductDetail(generics.RetrieveAPIView):
@@ -17,6 +27,22 @@ class ProductDetail(generics.RetrieveAPIView):
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filterset_fields = {
+        'name' : ['contains'],
+        'price' : ['exact', 'gte', 'lte'],
+        'category' : ['exact'],
+        'model_number' : ['contains'],
+        'other' : ['contains']
+    }
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend,
+        filters.SearchFilter, filters.OrderingFilter
+    ]
+    search_fields = ['$name', '$category',
+                     '$model_number', '$other']
+    ordering_fields = ['price', ]
+
+
 
 
 class OrderDetail(generics.RetrieveUpdateAPIView):
@@ -76,6 +102,11 @@ class OrderItemCreate(generics.CreateAPIView):
         return Response(
             data=OrderItemSerializer(order_item).data
         )
+
+class CategoryList(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 def home(request):

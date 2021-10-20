@@ -24,6 +24,20 @@ class UserSerializer(serializers.ModelSerializer):
         user_id = obj.id
         profile = Profile.objects.get(user=user_id)
         return profile.address
+    
+
+class NewUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username','password')
+
+    def create(self, validated_data):
+        user = super(NewUserSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class ProfileSerializer(serializers.ModelSerializer):

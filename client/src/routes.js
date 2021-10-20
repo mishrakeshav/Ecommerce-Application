@@ -15,6 +15,8 @@ import ViewProduct from './pages/ViewProduct';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import MyAccount from './pages/MyAccount';
+import CartNew from './pages/CartNew';
+import MyCart from './pages/MyCart';
 
 // ----------------------------------------------------------------------
 
@@ -24,15 +26,16 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" replace /> },
+        { element: <Navigate to="/dashboard/products/" replace /> },
         { path: 'app', element: <DashboardApp /> },
         // { path: ':token', element: <User /> },
-        { path: 'mycart', element: <Cart /> },
+        { path: 'mycart', element: <MyCart /> },
         { path: 'myorders', element: <Orders /> },
         { path: 'myaccount', element: <MyAccount /> },
         { path: 'products', element: <Products /> },
         { path: 'products/:id', element: <ViewProduct /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'blog', element: <Blog /> },
+        { path: 'cartnew', element: <CartNew /> }
       ]
     },
     {

@@ -11,10 +11,10 @@ const API = axios.create(
 );
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem('profile')) {
+  if (localStorage.getItem('auth')) {
     req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('auth')).access}`;
   } else {
-    window.location.href = "/";
+    window.location.href = "/login";
   }
   return req;
 });
@@ -49,5 +49,10 @@ API.interceptors.response.use(
 
 
 
-export const getUserData = API.get('/user/');
+export const getUserData =()=> API.get('/user/');
+export const updateUserData =(formData)=> API.put('/user/', formData);
+
+
+export const getAllOrders =(formData)=> API.get('/orders/', {params : formData});
+
 
