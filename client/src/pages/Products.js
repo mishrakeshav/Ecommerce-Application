@@ -60,7 +60,7 @@ export default function EcommerceShop() {
           justifyContent="flex-end"
           sx={{ mb: 5 }}
         >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1}}>
             <ProductFilterSidebar
               formik={formik}
               isOpenFilter={openFilter}

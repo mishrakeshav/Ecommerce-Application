@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack,Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 //
 import Label from '../../Label';
 import ColorPreview from '../../ColorPreview';
-
+import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
+import { Icon } from '@iconify/react';
 // ----------------------------------------------------------------------
 
 const ProductImgStyle = styled('img')({
@@ -50,28 +51,20 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+        <Link to="/dashboard/products/1" color="inherit" underline="hover" component={RouterLink}>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
+          {/* <ColorPreview colors={colors} /> */}
+          
           <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through'
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
             &nbsp;
-            {fCurrency(price)}
+            {'100 Rs'}
           </Typography>
+          <Button variant="outlined">Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
         </Stack>
       </Stack>
     </Card>

@@ -6,7 +6,9 @@ import GlobalStyles from './theme/globalStyles';
 // components
 import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
+import { ToastContainer, toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 // ----------------------------------------------------------------------
 
 export default function App() {
@@ -16,6 +18,7 @@ export default function App() {
       <GlobalStyles />
       <BaseOptionChartStyle />
       <Router />
+      <ToastContainer/>
     </ThemeConfig>
   );
 }

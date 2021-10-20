@@ -49,4 +49,4 @@ API.interceptors.response.use(
 
 
 
-export const getUserData = API.get('/user/data');
+export const getUserData = API.get('/user/');

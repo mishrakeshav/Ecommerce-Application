@@ -20,6 +20,7 @@ import { LoadingButton } from '@mui/lab';
 // API 
 // API 
 import { signIn } from '../../../api/auth';
+import {getUserData} from '../../../api';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,8 @@ export default function LoginForm() {
         const profile = await signIn({username : formik.values.email, password : formik.values.password});
         if(profile.status===200){
           localStorage.setItem('auth', JSON.stringify(profile?.data));
+          const user = await getUserData();
+          localStorage.setItem('user', JSON.stringify(user?.data));
         }
       }catch(error){
         console.log(error);
