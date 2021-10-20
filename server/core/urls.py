@@ -19,7 +19,7 @@ urlpatterns = [
     path('api/user/',include('users.urls')),
     path('api/',include('ecomm.urls')),
     path('admin/', admin.site.urls),
-    path('docs/', include_docs_urls(title='Starter Template')),
+    path('docs/', include_docs_urls(title='Ecomm')),
     path('schema/', get_schema_view(
         title="Starter Template API",
         description="Starter Template",
