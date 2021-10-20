@@ -17,7 +17,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/',include('users.urls')),
-    path('',include('ecomm.urls')),
+    path('api/',include('ecomm.urls')),
     path('admin/', admin.site.urls),
     path('docs/', include_docs_urls(title='Starter Template')),
     path('schema/', get_schema_view(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import ProductImage from '../components/ProductImage/ProductImage';
 import {
     Button,
@@ -6,15 +6,25 @@ import {
     Paper,
     Typography
 } from '@mui/material';
+import {useParams} from 'react-router-dom';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 import { Icon } from '@iconify/react';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { toast } from 'react-toastify';
 import ShareIcon from '@mui/icons-material/Share';
 import Barcode from 'react-barcode';
+import { getProduct } from 'src/api/auth';
 
 const ViewProduct = () => {
-    
+    const [product, setProduct] = useState({});
+    let { id } = useParams();
+    const fetchProduct = async ()=>{
+        const data = await getProduct({id});
+        setProduct(data?.data);
+    }
+    useEffect(()=>{
+        fetchProduct();
+    },[])
     return (
         <div>
             <Grid  container spacing={3} sx={{padding : '10px'}}>
@@ -27,7 +37,7 @@ const ViewProduct = () => {
                             <b>Product Name :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            SAMSUNG Galaxy F12 (Sea Green, 64 GB)  (4 GB RAM)
+                            {product.name}
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -35,7 +45,7 @@ const ViewProduct = () => {
                             <b>Price :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                        ₹ 9499.0 
+                        ₹ {product.price}
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -43,7 +53,7 @@ const ViewProduct = () => {
                             <b>Quantity Availabe :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            10
+                        {product.quantity}
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -51,7 +61,7 @@ const ViewProduct = () => {
                             <b>Product Category :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            10
+                            Mobile Phones
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -59,7 +69,7 @@ const ViewProduct = () => {
                             <b>Brand Name :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            Samsung
+                            {product.company_name}
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -67,7 +77,7 @@ const ViewProduct = () => {
                             <b>Model No:</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            SAMSUNG Galaxy F12
+                            {product.model_number}
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} my={1}>
@@ -83,13 +93,13 @@ const ViewProduct = () => {
                             Qualcomm Snapdragon 888 Octa-Core Processor
                         </Grid>
                         <Grid item xs={8} sm={8} lg={12} align="center">
-                            <Barcode value="barcodenumber" />
+                            <Barcode value={product.barcode_number} />
                         </Grid>
                     </Grid>
                     
                 </Grid>
                 <Grid item xs={12} sm={12} lg={6}>
-                    <ProductImage/>
+                    <ProductImage product={product}/>
                 </Grid>
                 <Grid item xs={12} sm={12} lg={6}>
                     <Button variant="contained" fullWidth my={1} sx={{padding:'10px', background : '#5C7AEA'}}> 

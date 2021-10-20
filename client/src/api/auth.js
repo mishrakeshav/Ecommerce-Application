@@ -20,6 +20,7 @@ const API = axios.create(
 // });
 
 
-
+export const getAllProducts = (formData)=> API.get('/products/', {params : formData});
+export const getProduct = (formData)=> API.get(`/products/${formData.id}`)
 
 export const signIn = (formData) => API.post('/token/', formData);
