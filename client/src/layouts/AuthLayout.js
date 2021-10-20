@@ -35,9 +35,9 @@ AuthLayout.propTypes = {
 export default function AuthLayout({ children }) {
   return (
     <HeaderStyle>
-      <RouterLink to="/">
-        <Logo />
-      </RouterLink>
+      {/* <RouterLink to="/"> */}
+        <Typography variant="h5" >ECOMM</Typography>
+      {/* </RouterLink> */}
 
       <MHidden width="smDown">
         <Typography

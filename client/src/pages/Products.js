@@ -12,11 +12,13 @@ import {
 } from '../components/_dashboard/products';
 //
 import PRODUCTS from '../_mocks_/products';
+import DrawerCart from '../components/DrawerCart';
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [openDrawer, setDrawer] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -36,7 +38,12 @@ export default function EcommerceShop() {
   const handleOpenFilter = () => {
     setOpenFilter(true);
   };
-
+  const handleOpenDrawer = ()=>{
+    setDrawer(true);
+  }
+  const handleCloseDrawer = ()=>{
+    setDrawer(false);
+  }
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
@@ -60,7 +67,7 @@ export default function EcommerceShop() {
           justifyContent="flex-end"
           sx={{ mb: 5 }}
         >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1}}>
             <ProductFilterSidebar
               formik={formik}
               isOpenFilter={openFilter}
@@ -73,7 +80,11 @@ export default function EcommerceShop() {
         </Stack>
 
         <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+        <DrawerCart 
+           isOpenFilter={openDrawer}
+           onOpenFilter={handleOpenDrawer}
+           onCloseFilter={handleCloseDrawer}
+        />
       </Container>
     </Page>
   );

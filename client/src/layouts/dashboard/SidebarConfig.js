@@ -18,8 +18,8 @@ const sidebarConfig = [
     icon: getIcon(pieChart2Fill)
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
+    title: 'My Account',
+    path: '/dashboard/myaccount',
     icon: getIcon(peopleFill)
   },
   {
@@ -28,8 +28,13 @@ const sidebarConfig = [
     icon: getIcon(shoppingBagFill)
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'My Cart',
+    path: '/dashboard/mycart',
+    icon: getIcon(fileTextFill)
+  },
+  {
+    title: 'My Orders',
+    path: '/dashboard/myorders',
     icon: getIcon(fileTextFill)
   },
   {

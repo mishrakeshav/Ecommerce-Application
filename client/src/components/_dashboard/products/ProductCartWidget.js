@@ -29,9 +29,9 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function CartWidget() {
+export default function CartWidget({onClick}) {
   return (
-    <RootStyle>
+    <RootStyle onClick={onClick}>
       <Badge showZero badgeContent={0} color="error" max={99}>
         <Icon icon={shoppingCartFill} width={24} height={24} />
       </Badge>

@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { Form, FormikProvider } from 'formik';
@@ -18,8 +19,14 @@ import {
   IconButton,
   Typography,
   RadioGroup,
-  FormControlLabel
+  FormControlLabel,
+  TextField
 } from '@mui/material';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 //
 import Scrollbar from '../../Scrollbar';
 import ColorManyPicker from '../../ColorManyPicker';
@@ -69,7 +76,29 @@ export default function ShopFilterSidebar({
   formik
 }) {
   const { values, getFieldProps, handleChange } = formik;
+  const [category, setCategory] = React.useState([
+    {
+    id : 1,
+      name : 'Mobile Phones'
+    },
+    {
+    id : 2,
+      name : 'Clothes'
+    },
+    {
+    id : 3,
+      name : 'Entertainment'
+    },
+    {
+    id : 4,
+      name : 'Electronics'
+    },
+  ]);
 
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
+  };
+  
   return (
     <>
       <Button
@@ -88,7 +117,7 @@ export default function ShopFilterSidebar({
             open={isOpenFilter}
             onClose={onCloseFilter}
             PaperProps={{
-              sx: { width: 280, border: 'none', overflow: 'hidden' }
+              sx: { width: 400, border: 'none', overflow: 'hidden' }
             }}
           >
             <Stack
@@ -109,39 +138,31 @@ export default function ShopFilterSidebar({
 
             <Scrollbar>
               <Stack spacing={3} sx={{ p: 3 }}>
-                <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Gender
-                  </Typography>
-                  <FormGroup>
-                    {FILTER_GENDER_OPTIONS.map((item) => (
-                      <FormControlLabel
-                        key={item}
-                        control={
-                          <Checkbox
-                            {...getFieldProps('gender')}
-                            value={item}
-                            checked={values.gender.includes(item)}
-                          />
-                        }
-                        label={item}
-                      />
-                    ))}
-                  </FormGroup>
-                </div>
 
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Category
                   </Typography>
-                  <RadioGroup {...getFieldProps('category')}>
-                    {FILTER_CATEGORY_OPTIONS.map((item) => (
-                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-                    ))}
-                  </RadioGroup>
+                  <TextField
+                  label="Category"
+                  defaultValue={1}
+                  fullWidth
+                  variant="outlined"
+                  select
+                  >
+                    {
+                      category.map((value)=>{
+                        return (
+                          <MenuItem value={value.id}>
+                            {value.name}
+                          </MenuItem>
+                        )
+                      })
+                    }
+                  </TextField>
                 </div>
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Colour
                   </Typography>
@@ -152,14 +173,27 @@ export default function ShopFilterSidebar({
                     onChecked={(color) => values.colors.includes(color)}
                     sx={{ maxWidth: 36 * 4 }}
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Price
                   </Typography>
                   <RadioGroup {...getFieldProps('priceRange')}>
-                    {FILTER_PRICE_OPTIONS.map((item) => (
+                    {[
+                      {
+                        value : 1000,
+                        label : 'Below 1000 Rs'
+                      },
+                      {
+                        value : 1000,
+                        label : 'Below 5000 Rs'
+                      },
+                      {
+                        value : 1000,
+                        label : 'Below 20000 Rs'
+                      },
+                    ].map((item) => (
                       <FormControlLabel
                         key={item.value}
                         value={item.value}
@@ -170,7 +204,7 @@ export default function ShopFilterSidebar({
                   </RadioGroup>
                 </div>
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Rating
                   </Typography>
@@ -203,7 +237,7 @@ export default function ShopFilterSidebar({
                       />
                     ))}
                   </RadioGroup>
-                </div>
+                </div> */}
               </Stack>
             </Scrollbar>
 
