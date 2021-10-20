@@ -27,31 +27,16 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, cover, price, image } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              zIndex: 9,
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase'
-            }}
-          >
-            {status}
-          </Label>
-        )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProductImgStyle alt={name} src={image} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="/dashboard/products/1" color="inherit" underline="hover" component={RouterLink}>
+        <Link to={`/dashboard/products/${product.id}`} color="inherit" underline="hover" component={RouterLink}>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
@@ -62,7 +47,7 @@ export default function ShopProductCard({ product }) {
           
           <Typography variant="subtitle1">
             &nbsp;
-            {'100 Rs'}
+            {`${price} Rs`}
           </Typography>
           <Button variant="outlined">Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
         </Stack>

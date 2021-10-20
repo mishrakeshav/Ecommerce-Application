@@ -9,6 +9,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
+import products from 'src/_mocks_/products';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -35,7 +36,7 @@ const images = [
   },
 ];
 
-function SwipeableTextMobileStepper() {
+function SwipeableTextMobileStepper({product}) {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = images.length;
@@ -72,25 +73,141 @@ function SwipeableTextMobileStepper() {
         index={activeStep}
         onChangeIndex={handleStepChange}
         enableMouseEvents
+        align="center"
       >
-        {images.map((step, index) => (
-          <div key={step.label}>
-            {Math.abs(activeStep - index) <= 2 ? (
+        {
+          product.image && (
+            <div key={product.image}>
               <Box
                 component="img"
                 sx={{
-                  height: 400,
+                  height: 600,
                   display: 'block',
                   maxWidth: '100%',
                   overflow: 'hidden',
-                  width: '100%',
+                  // width: '100%',
                 }}
-                src={step.imgPath}
-                alt={step.label}
+                src={product.image}
+                alt={product.name}
               />
-            ) : null}
           </div>
-        ))}
+          )
+        }
+        {
+          product.image1 && (
+            <div key={product.image1}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image1}
+                alt={product.name}
+              />
+          </div>
+          )
+        }
+        {/* {
+          product.image2 && (
+            <div key={product.image2}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  // width : 300,
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image2}
+                alt={product.name}
+              />
+          </div>
+          )
+        } */}
+        {
+          product.image2 && (
+            <div key={product.image2}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  // width : 300,
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image2}
+                alt={product.name}
+              />
+          </div>
+          )
+        }
+        {
+          product.image3 && (
+            <div key={product.image3}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  // width : 300,
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image3}
+                alt={product.name}
+              />
+          </div>
+          )
+        }
+        {
+          product.image4 && (
+            <div key={product.image4}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  // width : 300,
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image4}
+                alt={product.name}
+              />
+          </div>
+          )
+        }
+        {
+          product.image5 && (
+            <div key={product.image5}>
+              <Box
+                component="img"
+                sx={{
+                  height: 600,
+                  // width : 300,
+                  display: 'block',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  // width: '100%',
+                }}
+                src={product.image5}
+                alt={product.name}
+              />
+          </div>
+          )
+        }
+        
       </AutoPlaySwipeableViews>
       <MobileStepper
         steps={maxSteps}

@@ -19,34 +19,8 @@ const API = axios.create(
 //   return req;
 // });
 
-API.interceptors.response.use(
-	(response) => response,
-    async function errorfunc(error) {
-		const originalRequest = error.config;
 
-		if (typeof error.response === 'undefined') {
-			toast.error('Server Error', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-			return Promise.reject(error);
-		}
-    if(error.response.status === 401){
-      localStorage.clear();
-      window.location.href="/login";
-    }
-
-
-		// specific error handling done elsewhere
-		return Promise.reject(error);
-	}
-);
-
-
+export const getAllProducts = (formData)=> API.get('/products/', {params : formData});
+export const getProduct = (formData)=> API.get(`/products/${formData.id}`)
 
 export const signIn = (formData) => API.post('/token/', formData);
