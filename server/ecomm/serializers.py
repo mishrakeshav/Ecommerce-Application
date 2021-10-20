@@ -69,20 +69,19 @@ class OrderSerializer(serializers.ModelSerializer):
         return order_items.values()
 
 
-<<<<<<< HEAD
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = (
             'product',
             'quantity',
-            'price',
-=======
+        )
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = (
             'id',
             'name',
->>>>>>> b6592636cf7ef72901a269568e94e00ca5a2ea31
         )
