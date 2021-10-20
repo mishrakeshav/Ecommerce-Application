@@ -1,9 +1,12 @@
-from django.db.models import fields
 from rest_framework import serializers
-from .models import Order, OrderItem, Product
+from .models import Order, OrderItem, Product, Category
+from django.shortcuts import get_object_or_404
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
+    category = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
         fields = (
@@ -16,6 +19,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'model_number',
             'image',
         )
+
+    def get_category(self, obj):
+        if obj.category:
+            return obj.category.name
+        return ''
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):

@@ -15,25 +15,6 @@ class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-    # filterset_fields = {
-    #     'fees': ['exact', 'gte', 'lte'],
-    #     'rank': ['exact', 'gte', 'lte'],
-    #     'percentile': ['exact', 'gte', 'lte'],
-    #     'avg_percentile': ['exact', 'gte', 'lte'],
-    #     'rating': ['exact', 'gte', 'lte'],
-    #     'institute_name': ['contains'],
-    #     'state': ['contains'],
-    #     'city': ['contains'],
-    #     'branch': ['contains'],
-    # }
-
-    # filter_backends = [
-    #     django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    # search_fields = ['$institute_name', '$state',
-    #                  '$city', '$branch', '$facilities']
-    # ordering_fields = ['fees', 'rank',
-    #                    'percentile', 'avg_percentile', 'rating','w0','w1','w10', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9']
-
 
 class OrderDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -41,7 +22,7 @@ class OrderDetail(generics.RetrieveUpdateAPIView):
     serializer_class = OrderSerializer
 
 
-class OrderList(generics.ListAPIView):
+class OrderList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -50,6 +31,10 @@ class OrderList(generics.ListAPIView):
         user_id = self.request.user.id
         orders = Order.objects.filter(user=user_id)
         return orders
+
+    def post(self, request, *args, **kwargs):
+        # TODO: Implement CART feature
+        return super().post(request, *args, **kwargs)
 
 
 def home(request):
