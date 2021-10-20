@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'users.apps.UsersConfig',
+    'ecomm.apps.EcommConfig',
 ]
 
 MIDDLEWARE = [
