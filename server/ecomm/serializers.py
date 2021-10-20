@@ -66,3 +66,12 @@ class OrderSerializer(serializers.ModelSerializer):
         order_id = obj.id
         order_items = OrderItem.objects.filter(order=order_id).all()
         return order_items.values()
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = (
+            'id',
+            'name',
+        )

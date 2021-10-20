@@ -1,9 +1,15 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
+from rest_framework import filters
+import django_filters.rest_framework
 
-from .models import (Product, Order)
+from .models import (Category, Product, Order)
 from .serializers import (
-    ProductSerializer, ProductDetailSerializer, OrderSerializer)
+    ProductSerializer, 
+    ProductDetailSerializer, 
+    OrderSerializer,
+    CategorySerializer
+)
 
 
 class ProductDetail(generics.RetrieveAPIView):
@@ -14,6 +20,22 @@ class ProductDetail(generics.RetrieveAPIView):
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filterset_fields = {
+        'name' : ['contains'],
+        'price' : ['exact', 'gte', 'lte'],
+        'category' : ['exact'],
+        'model_number' : ['contains'],
+        'other' : ['contains']
+    }
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend, 
+        filters.SearchFilter, filters.OrderingFilter
+    ]
+    search_fields = ['$name', '$category',
+                     '$model_number', '$other']
+    ordering_fields = ['price', ]
+
+
 
 
 class OrderDetail(generics.RetrieveUpdateAPIView):
@@ -35,6 +57,11 @@ class OrderList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         # TODO: Implement CART feature
         return super().post(request, *args, **kwargs)
+
+class CategoryList(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 def home(request):

@@ -21,7 +21,10 @@ const API = axios.create(
 
 
 export const getAllProducts = (formData)=> API.get('/products/', {params : formData});
-export const getProduct = (formData)=> API.get(`/products/${formData.id}`)
+export const getProduct = (formData)=> API.get(`/products/${formData.id}`);
+
+
+export const getAllCategory = (formData) => API.get('/categories/', {params : formData});
 
 export const signIn = (formData) => API.post('/token/', formData);
 export const signUp = (formData) => API.post('/user/create/', formData);

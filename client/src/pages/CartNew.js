@@ -112,8 +112,9 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
     const fetchAllOrders = async ()=>{
         const data = await getAllOrders();
-        console.log(data?.data);
-        setOrders(data?.data);
+        console.log(data);
+        console.log(data?.data?.results);
+        setOrders(data?.data?.results);
       }
       useEffect(()=>{
         fetchAllOrders();
