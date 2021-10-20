@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from .models import Order, OrderItem, Product, Category
 from django.shortcuts import get_object_or_404
@@ -64,3 +65,13 @@ class OrderSerializer(serializers.ModelSerializer):
         order_id = obj.id
         order_items = OrderItem.objects.filter(order=order_id).all()
         return order_items.values()
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = (
+            'product',
+            'quantity',
+            'price',
+        )
