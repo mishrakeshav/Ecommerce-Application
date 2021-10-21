@@ -66,14 +66,14 @@ const ViewProduct = () => {
                         {product.quantity}
                         </Grid>
                     </Grid>
-                    <Grid container spacing={3} my={1}>
+                    {/* <Grid container spacing={3} my={1}>
                         <Grid item xs={3} sm={3} lg={3}>
                             <b>Product Category :</b>
                         </Grid>
                         <Grid item xs={9} sm={9} lg={9}>
-                            Mobile Phones
+                            {product.category}
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                     <Grid container spacing={3} my={1}>
                         <Grid item xs={3} sm={3} lg={3}>
                             <b>Brand Name :</b>

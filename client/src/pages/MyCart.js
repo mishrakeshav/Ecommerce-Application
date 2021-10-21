@@ -69,8 +69,8 @@ const Row = (props)=>{
                     <TableCell>{props.idx+1}</TableCell>
                     <TableCell>{props.order?.id}</TableCell>
                     
-                    <TableCell> <img width="150px" src={`http://localhost:8000${props.order.product.image}/`} width="20%" height="20%"/></TableCell>
-                    
+                    <TableCell> <img  src={`http://localhost:8000${props.order.product.image}/`}  height="100px"/></TableCell>
+                    <TableCell>{props.order?.product.name}</TableCell>
                     <TableCell>
                         <TextField
                             variant="outlined"
@@ -200,6 +200,7 @@ const Orders = () => {
                                             {/* <TableCell></TableCell> */}
                                             <TableCell>Order ID</TableCell>                                      
                                             <TableCell>Product Image</TableCell>
+                                            <TableCell>Product Name</TableCell>
                                             <TableCell>Quantity</TableCell>
                                             <TableCell>Price</TableCell>
                                             <TableCell>Line Total</TableCell>
