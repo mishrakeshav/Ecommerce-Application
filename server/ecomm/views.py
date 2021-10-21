@@ -1,6 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import get_object_or_404, render
 from rest_framework import generics, permissions, filters, status
+from rest_framework.decorators import api_view
+
 from rest_framework import response
 from rest_framework.response import Response
 import django_filters.rest_framework
@@ -197,6 +200,33 @@ class CategoryList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+@api_view(['GET'])
+def getcounts(request):
+    total_products = Product.objects.count()
+    total_orders = Order.objects.filter(status = 'PL').count()
+    total_delivered = Order.objects.filter(status='DL').count()
+    total_customers = User.objects.count()
+    return Response({
+        "total_customers" : total_customers,
+        "total_delivered" : total_delivered,
+        "total_orders" : total_orders,
+        "total_products" : total_products
+    })
+
+@api_view(['GET'])
+def sales(request):
+    total_products = Product.objects.count()
+    total_orders = Order.objects.filter(status = 'PL').count()
+    total_delivered = Order.objects.filter(status='DL').count()
+    total_customers = User.objects.count()
+    return Response({
+        "total_customers" : total_customers,
+        "total_delivered" : total_delivered,
+        "total_orders" : total_orders,
+        "total_products" : total_products
+    })
 
 
 def home(request):

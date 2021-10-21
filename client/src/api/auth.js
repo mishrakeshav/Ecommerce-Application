@@ -24,6 +24,8 @@ export const getAllProducts = (formData)=> API.get('/products/', {params : formD
 export const getProduct = (formData)=> API.get(`/products/${formData.id}`);
 
 
+export const getCounts = (formData) => API.get('/counts/')
+
 export const getAllCategory = (formData) => API.get('/categories/', {params : formData});
 
 export const signIn = (formData) => API.post('/token/', formData);
