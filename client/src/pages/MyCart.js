@@ -22,8 +22,9 @@ import { alpha, styled } from '@mui/material/styles';
 import { getCartItems } from '../api';
 import Cart from './Cart';
 import { toast } from 'react-toastify';
-import {getUserData,placeUserOrder} from '../api/index';
+import {getUserData,placeUserOrder,updateCartItem, deleteCartItem} from '../api/index';
 import { useNavigate } from 'react-router';
+
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 const CartPaper = styled(Paper)(({ theme }) => ({
@@ -34,10 +35,27 @@ const Row = (props)=>{
     console.log('here');
     const [edit, setEdit] = useState(false);
     const [quantity, setQuantity] = useState(props.order.quantity);
-    const handleEdit = ()=>{
+    const handleEdit = async ()=>{
+        try{
+            const data = await updateCartItem({quantity, price : props.order.price, id : props.order.id});
+            
+            toast('Order Item Updated');
+            window.location.reload();
+            
+        }catch(error){
+            console.log(error);
+        }
         setEdit(true);
     }
-    const handleDelete = ()=>{
+    const handleDelete = async ()=>{
+        try{
+            const data = await deleteCartItem({id : props.order.id});
+            toast('Order Item Deleted');
+            window.location.reload();
+            
+        }catch(error){
+            console.log(error);
+        }
         setEdit(false);
     }
     const handleUpdate = ()=>{
@@ -47,46 +65,11 @@ const Row = (props)=>{
       
     return (
         <>
-        {
-            edit ? (
-                <TableRow>
-                    <TableCell>{props.order?.id}</TableCell>
-
-                    {/* <TableCell>
-                        {props.order?.id}
-                    </TableCell> */}
-                    <TableCell>
-                        <TextField
-                            variant="outlined"
-                            fullwdith
-                            size="small"
-                            label="Quantity"
-                            type="number"
-                            value={quantity}
-                            onChange={(e)=>{
-                                setQuantity(e.target.value);
-                            }}
-                        />
-                    </TableCell>
-                    <TableCell>
-                        {props.order?.price}
-                    </TableCell>
-                    <TableCell>
-                    {props.order?.category}
-                    </TableCell>
-                    <TableCell>
-                        <Button variant="outlined" sx={{color:'#193498', borderColor:'#193498'}}>
-                            Update
-                        </Button>
-                    </TableCell>
-                    <TableCell><Button onClick={handleDelete}>Cancel</Button></TableCell>
-            </TableRow>
-
-            ): (
                 <TableRow>
                     <TableCell>{props.idx+1}</TableCell>
                     <TableCell>{props.order?.id}</TableCell>
-                    <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell>
+                    
+                    <TableCell> <img width="150px" src={`http://localhost:8000${props.order.product.image}/`} width="20%" height="20%"/></TableCell>
                     
                     <TableCell>
                         <TextField
@@ -101,7 +84,7 @@ const Row = (props)=>{
                         />
                     </TableCell>
                     <TableCell>{props.order?.price}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>{props.order?.price*props.order.quantity}</TableCell>
                     
                     <TableCell>
                             <Button 
@@ -121,8 +104,6 @@ const Row = (props)=>{
                     </TableCell>
 
                 </TableRow>
-            )
-        }
         </>
         
     )
@@ -180,7 +161,7 @@ const Orders = () => {
             order_item : orderItems
         })
         if(data?.status===200){
-            localStorage.setItem('placeOrder', 'No');
+            localStorage.setItem('placeOrder', 'YES');
             toast('Your order has been placed');
             navigate('/dashboard/CartNew/', { replace: true });
         }
@@ -307,7 +288,7 @@ const Orders = () => {
                     </Grid>
             </Grid>
             ) : (
-                <Cart finalPlaceOrder={finalPlaceOrder} cartItems={cartItems} back={true} userData={userData} cancelPlaceOrder={cancelPlaceOrder} shippingDetails={shippingDetails}/>
+                <Cart fetchAllOrders={fetchAllOrders} finalPlaceOrder={finalPlaceOrder} cartItems={cartItems} back={true} userData={userData} cancelPlaceOrder={cancelPlaceOrder} shippingDetails={shippingDetails}/>
             )}
         
         </>
