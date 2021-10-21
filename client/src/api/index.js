@@ -64,7 +64,7 @@ export const deleteCartItem = (formData) => API.delete(`/orderitem/${formData.id
 export const addItemToCart = (formData) => API.post('/orderitem/create/', formData);
 export const addItemToWishlist = (formData) => API.post('/wishlist/create/', formData);
 export const getWishlist =(formData)=> API.get('/wishlist/', {params : formData});
-export const removeWishlist =(formData)=> API.delete('/wishlist/', {params : formData});
+export const removeWishlist =(formData)=> API.delete(`/wishlist/${formData.id}/`, {params : formData});
 
 
 

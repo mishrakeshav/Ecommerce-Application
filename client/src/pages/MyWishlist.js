@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import {toast} from 'react-toastify';
 import {
     Grid,
     Paper,
@@ -80,6 +81,11 @@ const Orders = () => {
         console.log(data?.data?.results);
         setOrders(data?.data?.results);
       }
+    const handleDelete = async (id)=>{
+        const data = await removeWishlist({id:id});
+        toast ('Item Deleted from Wishlist');
+        fetchWishlist();
+    }
     useEffect(
         ()=>{
             fetchWishlist();
@@ -110,7 +116,16 @@ const Orders = () => {
                                     <TableBody>
                                         {
                                             orders.map((value,idx)=>(
-                                                <Row order={value} idx={idx}/>
+                                                <TableRow>
+                                                <TableCell>{idx+1}</TableCell>
+                                                <TableCell> <img width="150px" src={ 'http://localhost:8000' +  value?.product?.image } /></TableCell>
+                                                <TableCell>{value?.product?.id}</TableCell>
+                                                <TableCell>{value?.product?.price}</TableCell>
+                                                <TableCell>Category</TableCell>
+                                                {/* <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell> */}
+                                                <TableCell><Button onClick={()=>{handleDelete(value.id)}}>DELETE</Button></TableCell>
+                            
+                                            </TableRow>
                                             ))
                                         }
 
