@@ -79,10 +79,10 @@ class OrderList(generics.ListCreateAPIView):
         )
 
 
-class OrderItemList(generics.ListCreateAPIView):
+class OrderItemList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = OrderItem.objects.all()
-    serializer_class = OrderItemCreateSerializer
+    serializer_class = OrderItemSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -91,6 +91,12 @@ class OrderItemList(generics.ListCreateAPIView):
             Cart.objects.filter(user=user).all()
         ))
         return order_item
+
+
+class OrderItemCreate(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemCreateSerializer
 
     def post(self, request, *args, **kwargs):
         data = request.data

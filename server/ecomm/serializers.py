@@ -74,16 +74,9 @@ class OrderSerializer(serializers.ModelSerializer):
         order_items = order_items.values()
 
         for item in order_items:
-            product = get_object_or_404(
-                Product, pk=item['product_id'])
+            product = get_object_or_404(Product, pk=item['product_id'])
 
-            product = model_to_dict(
-                product,
-                fields=[field.name for field in product._meta.fields])
-
-            for field in product.keys():
-                if 'image' in field:
-                    product[field] = product[field].url
+            product = serialize_product()
 
             item['product'] = product
             del item['product_id']
@@ -122,7 +115,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
         )
 
     def get_product(self, obj):
-        return get_object_or_404(Product, )
+        product = get_object_or_404(Product, pk=obj.product.id)
+        product = serialize_product(product)
+        return product
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -132,3 +127,15 @@ class CategorySerializer(serializers.ModelSerializer):
             'id',
             'name',
         )
+
+
+def serialize_product(product: Product) -> dict:
+    product = model_to_dict(
+        product,
+        fields=[field.name for field in product._meta.fields])
+
+    for field in product.keys():
+        if 'image' in field:
+            product[field] = product[field].url
+
+    return product

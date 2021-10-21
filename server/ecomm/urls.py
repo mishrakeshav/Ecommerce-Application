@@ -13,6 +13,8 @@ urlpatterns = [
     path('orders/<int:pk>/', views.OrderDetail.as_view(), name='order_detail'),
 
     path('orderitem/', views.OrderItemList.as_view(), name='orderitem_list'),
+    path('orderitem/create/', views.OrderItemCreate.as_view(),
+         name='orderitem_create'),
     path('orderitem/<int:pk>/', views.OrderItemDetail.as_view(),
          name='orderitem_detail'),
 
