@@ -10,6 +10,8 @@ import Label from '../../Label';
 import ColorPreview from '../../ColorPreview';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 import { Icon } from '@iconify/react';
+import { toast } from 'react-toastify';
+import {addItemToCart} from '../../../api';
 // ----------------------------------------------------------------------
 
 const ProductImgStyle = styled('img')({
@@ -28,6 +30,10 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { name, cover, price, image } = product;
+  const addToCart = async ()=>{
+    const data = await addItemToCart({product : product.id, quantity : 1});
+    toast('Item Added to Cart')
+  }
 
   return (
     <Card>
@@ -49,7 +55,7 @@ export default function ShopProductCard({ product }) {
             &nbsp;
             {`${price} Rs`}
           </Typography>
-          <Button variant="outlined">Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
+          <Button variant="outlined" onClick={addToCart}>Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
         </Stack>
       </Stack>
     </Card>

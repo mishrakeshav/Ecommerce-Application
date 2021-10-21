@@ -10,9 +10,10 @@ import {
     TableHead,
     TableRow,
     Button,
-    TextField
-} from '@mui/material'
-;
+    TextField,
+    Chip
+} from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import { alpha, styled } from '@mui/material/styles';
 import { getAllOrders } from '../api';
@@ -92,11 +93,20 @@ const Row = (props)=>{
                     <TableCell>{props.idx+1}</TableCell>
                     {/* <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell> */}
                     <TableCell>{props.order?.id}</TableCell>
-                    <TableCell>{order_status}</TableCell>
-                    <TableCell>3</TableCell>
-                    <TableCell>{props.order?.price}</TableCell>
+                    <TableCell> <Chip label={order_status} color="primary" /></TableCell>
+                    <TableCell>{props.order?.total_items}</TableCell>
+                    <TableCell>{props.order?.total_price}</TableCell>
                     <TableCell>{props.order?.shipping_address}</TableCell>
-                    <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell>
+                    <TableCell>
+                        <Button 
+                            variant="contained" 
+                            component={Link}
+                            to={`/dashboard/myorders/${props.order.id}`}
+                            sx={{background : '#3D56B2', margin:'2px'}}
+                        >
+                            <OpenInNewIcon/>
+                        </Button>
+                    </TableCell>
                     <TableCell><Button onClick={handleDelete}>DELETE</Button></TableCell>
 
                 </TableRow>
@@ -113,7 +123,6 @@ const Orders = () => {
     const fetchAllOrders = async ()=>{
         console.log('here')
         const data = await getAllOrders();
-        console.log(data);
         console.log(data?.data?.results);
         setOrders(data?.data?.results);
       }

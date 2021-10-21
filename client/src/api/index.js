@@ -54,5 +54,14 @@ export const updateUserData =(formData)=> API.put('/user/', formData);
 
 
 export const getAllOrders =(formData)=> API.get('/orders/', {params : formData});
+export const getOrder = (formData) => API.get(`/orders/${formData.id}/`);
+export const placeUserOrder = (formData) => API.get('')
+
+export const getCartItems = (formData) => API.get('/orderitem/', formData);
+export const updateCartItem = (formData) => API.put('/orderitem/', formData);
+export const deleteCartItem = (formData) => API.delete('/orderitem/', formData);
+
+export const addItemToCart = (formData) => API.post('/orderitem/create/', formData);
+
 
 

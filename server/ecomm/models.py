@@ -65,10 +65,11 @@ class OrderItem(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    order_item = models.OneToOneField(OrderItem, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
+    order_item = models.OneToOneField(OrderItem, on_delete=models.SET_NULL, null=True, blank=True)
+
 
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product,  on_delete=models.SET_NULL, null=True, blank=True)

@@ -11,7 +11,7 @@ import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
-const sidebarConfig = [
+let sidebarConfig = [
   // {
   //   title: 'dashboard',
   //   path: '/dashboard/app',
@@ -42,21 +42,20 @@ const sidebarConfig = [
     path: '/dashboard/MyWishlist',
     icon: getIcon(fileTextFill)
   },
-  {
+];
+
+if(JSON.parse(localStorage.getItem('auth'))===null){
+  sidebarConfig.push( {
     title: 'login',
     path: '/login',
     icon: getIcon(lockFill)
-  },
-  {
+  } 
+  );
+  sidebarConfig.push({
     title: 'register',
     path: '/register',
     icon: getIcon(personAddFill)
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon(alertTriangleFill)
-  }
-];
+  })
+}
 
 export default sidebarConfig;

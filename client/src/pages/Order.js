@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React,{useEffect,useState} from 'react';
+import { useParams } from 'react-router';
 import {
     Paper,
     Grid,
@@ -16,12 +16,19 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Download';
+import {getUserData,getOrder} from '../api/index';
+
+
 const CartPaper = styled(Paper)(({ theme }) => ({
     padding : theme.spacing(2),
 }));
 
 
-const Cart = (props) => {
+
+const Order = (props) => {
+    let { id } = useParams();
+    const [userData, setUserData] = useState({});
+    const [order, setOrder] = useState({item_list : []});
     const genPdf = ()=>{
         // var prtContent = document.getElementById("invoice");
         var printContents = document.getElementById("invoice").innerHTML;
@@ -31,6 +38,28 @@ const Cart = (props) => {
         document.body.innerHTML = originalContents;
         window.location.reload()
     }
+    const fetchUserData = async  ()=>{
+        try{
+            const data = await getUserData();
+            setUserData(data?.data);
+            console.log(data);
+        }catch(error){
+            console.log(error);
+        }
+    }
+    const fetchOrderData = async ()=>{
+        try{
+            const data = await getOrder({id:id});
+            setOrder(data?.data)
+            console.log(order);
+        }catch(error){
+            console.log(error);
+        }
+    }
+    useEffect(()=>{
+        fetchOrderData();
+        fetchUserData();
+    },[]);
     return (
         <div>
             <CartPaper  elevation={20}>
@@ -51,14 +80,14 @@ const Cart = (props) => {
                             </Grid>
                             <Grid item xs={4} sm={4} lg={4}>
                                 <b>To :</b> <br/>
-                                Keshav Mishra, <br/>
-                                Somaiya Ayurvihar, <br/>
-                                Sion, <br/>
-                                Mumbai West 400022<br/>
+                                {userData.first_name} {userData.last_name}, <br/>
+                                {userData.username}, <br/>
+                                
+                                {order.shipping_address}, <br/>
                             </Grid>
                             <Grid item xs={4} sm={4} lg={4}>
-                                <b>Invoice : #00001</b> <br/>
-                                Order Id : 4F3S8J <br/>
+                                <b>Invoice : #0000{order.id}</b> <br/>
+                                Order Id : 4F3S8{order.id} <br/>
                                 {/* Somaiya Ayurvihar, <br/>
                                 Sion, <br/>
                                 Mumbai West 400022<br/> */}
@@ -81,14 +110,23 @@ const Cart = (props) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                    <TableRow>
-                                            <TableCell> #</TableCell>
-                                            <TableCell></TableCell>
-                                            <TableCell>Product Name</TableCell>
-                                            <TableCell>Quantity</TableCell>
-                                            <TableCell>Price</TableCell>
-                                            <TableCell>Line Total</TableCell>
-                                        </TableRow>
+                                   
+                                            {
+                                                order.item_list?.map((value,idx)=>(
+                                                    <TableRow>
+                                                        <TableCell> {idx + 1}</TableCell>
+                                                        {/* {`http://localhost:8000${value.product.image}`} */}
+                                                        <TableCell><image src={`http://localhost:8000${value.product.image}`}  /></TableCell>
+                                                        <TableCell>{value.product.name}</TableCell>
+                                                        <TableCell>{value.quantity}</TableCell>
+                                                        <TableCell>{value.product.barcode_number}</TableCell>
+                                                        <TableCell>{value.price}</TableCell>
+                                                        <TableCell>{value.quantity*value.price}</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            }
+                                            
+                                        
                                     </TableBody>
                                 </Table>
                             </TableContainer>
@@ -100,7 +138,7 @@ const Cart = (props) => {
                                     Subtotal
                                 </Grid>
                                 <Grid item xs={6} sm={6} lg={6} >
-                                    <b>1000 Rs</b>
+                                    <b>{order.total_price} Rs</b>
                                 </Grid>
                                 
                             </Grid>
@@ -110,7 +148,7 @@ const Cart = (props) => {
                                     GST
                                 </Grid>
                                 <Grid item xs={6} sm={6} lg={6} >
-                                    <b>18%</b>
+                                    <b>{order.total_price + order.total_price*0.18} Rs</b>
                                 </Grid>
                             </Grid>
                             <Divider/>
@@ -119,7 +157,7 @@ const Cart = (props) => {
                                     Total Payable Amount
                                 </Grid>
                                 <Grid item xs={6} sm={6} lg={6} >
-                                    <b>1180 Rs</b>
+                                    <b>{order.total_price + order.total_price*0.18} Rs</b>
                                 </Grid>
                             </Grid>
                             <Divider/>
@@ -128,7 +166,14 @@ const Cart = (props) => {
                                     Total Amount Paid
                                 </Grid>
                                 <Grid item xs={6} sm={6} lg={6} >
-                                    <b>0 Rs</b>
+                                    {
+                                        order.status ==='DL' ? (
+                                            <b>{order.total_price + order.total_price*0.18} Rs</b>
+                                        ) : (
+                                            <b>0 Rs</b>
+                                        )
+                                    }
+                                    
                                 </Grid>
                             </Grid>
                             <Divider/>
@@ -141,7 +186,7 @@ const Cart = (props) => {
                                 <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={props.cancelPlaceOrder}>Back</Button>
                             )
                         }
-                        <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}}>Place Order</Button>
+                        {/* <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}}>Place Order</Button> */}
                         <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={genPdf}><DownloadIcon/>Download Invoice</Button>
                     </Grid>
                 </Grid>
@@ -151,4 +196,4 @@ const Cart = (props) => {
     )
 }
 
-export default Cart;
+export default Order;
