@@ -21,6 +21,10 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { alpha, styled } from '@mui/material/styles';
 import { getCartItems } from '../api';
 import Cart from './Cart';
+import { toast } from 'react-toastify';
+import {getUserData,placeUserOrder,updateCartItem, deleteCartItem} from '../api/index';
+import { useNavigate } from 'react-router';
+
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 const CartPaper = styled(Paper)(({ theme }) => ({
@@ -31,10 +35,27 @@ const Row = (props)=>{
     console.log('here');
     const [edit, setEdit] = useState(false);
     const [quantity, setQuantity] = useState(props.order.quantity);
-    const handleEdit = ()=>{
+    const handleEdit = async ()=>{
+        try{
+            const data = await updateCartItem({quantity, price : props.order.price, id : props.order.id});
+            
+            toast('Order Item Updated');
+            window.location.reload();
+            
+        }catch(error){
+            console.log(error);
+        }
         setEdit(true);
     }
-    const handleDelete = ()=>{
+    const handleDelete = async ()=>{
+        try{
+            const data = await deleteCartItem({id : props.order.id});
+            toast('Order Item Deleted');
+            window.location.reload();
+            
+        }catch(error){
+            console.log(error);
+        }
         setEdit(false);
     }
     const handleUpdate = ()=>{
@@ -44,46 +65,11 @@ const Row = (props)=>{
       
     return (
         <>
-        {
-            edit ? (
-                <TableRow>
-                    <TableCell>{props.order?.id}</TableCell>
-
-                    {/* <TableCell>
-                        {props.order?.id}
-                    </TableCell> */}
-                    <TableCell>
-                        <TextField
-                            variant="outlined"
-                            fullwdith
-                            size="small"
-                            label="Quantity"
-                            type="number"
-                            value={quantity}
-                            onChange={(e)=>{
-                                setQuantity(e.target.value);
-                            }}
-                        />
-                    </TableCell>
-                    <TableCell>
-                        {props.order?.price}
-                    </TableCell>
-                    <TableCell>
-                    {props.order?.category}
-                    </TableCell>
-                    <TableCell>
-                        <Button variant="outlined" sx={{color:'#193498', borderColor:'#193498'}}>
-                            Update
-                        </Button>
-                    </TableCell>
-                    <TableCell><Button onClick={handleDelete}>Cancel</Button></TableCell>
-            </TableRow>
-
-            ): (
                 <TableRow>
                     <TableCell>{props.idx+1}</TableCell>
                     <TableCell>{props.order?.id}</TableCell>
-                    <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell>
+                    
+                    <TableCell> <img width="150px" src={`http://localhost:8000${props.order.product.image}/`} width="20%" height="20%"/></TableCell>
                     
                     <TableCell>
                         <TextField
@@ -98,7 +84,7 @@ const Row = (props)=>{
                         />
                     </TableCell>
                     <TableCell>{props.order?.price}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>{props.order?.price*props.order.quantity}</TableCell>
                     
                     <TableCell>
                             <Button 
@@ -118,8 +104,6 @@ const Row = (props)=>{
                     </TableCell>
 
                 </TableRow>
-            )
-        }
         </>
         
     )
@@ -129,12 +113,33 @@ const Row = (props)=>{
 const Orders = () => {
     const [cartItems, setCartItems] = useState({results : []});
     const [placeOrder, setPlaceOrder] = useState(localStorage.getItem('placeOrder')==='YES');
+    const [shippingDetails, setShippingDetails] = useState(JSON.parse(localStorage.getItem('shippingDetails')) || {});
+    const [userData, setUserData] = useState({});
+    const navigate = useNavigate();
+    const handleShippingDetailChange = (e)=>{
+        setShippingDetails({...shippingDetails, [e.target.name]:e.target.value});
+    }
     const fetchAllOrders = async ()=>{
         const data = await getCartItems();
         console.log(data?.data);
         setCartItems(data?.data);
     }
+    
     const postPlaceOrder = ()=>{
+        if(
+            !shippingDetails.address || shippingDetails.address === '' ||
+            !shippingDetails.pincode || shippingDetails.pincode === '' ||
+            !shippingDetails.city || shippingDetails.city === '' ||
+            !shippingDetails.state || shippingDetails.state === '' 
+        ){
+            toast('Please Enter All Shipping Details');
+            return;
+        };
+        if(cartItems.results.length === 0){
+            toast('There are not items in Cart');
+            return;
+        }
+        localStorage.setItem('shippingDetails', JSON.stringify(shippingDetails));
         localStorage.setItem('placeOrder', 'YES');
         setPlaceOrder(true);
     }
@@ -142,8 +147,37 @@ const Orders = () => {
         localStorage.setItem('placeOrder', 'No');
         setPlaceOrder(false);
     }
+    const finalPlaceOrder = async ()=>{
+        let orderItems = [];
+        cartItems.results.map((value,idx)=>{
+            orderItems.push(value.id);
+        })
+        console.log(orderItems)
+        const data = await placeUserOrder({
+            shipping_address : shippingDetails.address,
+            pincode : shippingDetails.pincode,
+            city : shippingDetails.city,
+            state : shippingDetails.city,
+            order_item : orderItems
+        })
+        if(data?.status===200){
+            localStorage.setItem('placeOrder', 'YES');
+            toast('Your order has been placed');
+            navigate('/dashboard/CartNew/', { replace: true });
+        }
+    }
+    const fetchUserData = async  ()=>{
+        try{
+            const data = await getUserData();
+            setUserData(data?.data);
+            console.log(data);
+        }catch(error){
+            console.log(error);
+        }
+    }
     useEffect(()=>{
     fetchAllOrders();
+    fetchUserData();
     },[])
 
      
@@ -196,6 +230,9 @@ const Orders = () => {
                                     multiline
                                     fullWidth
                                     label="Shipping Address"
+                                    name="address"
+                                    value={shippingDetails.address}
+                                    onChange={handleShippingDetailChange}
                                     rows={3}
                                 >
 
@@ -206,6 +243,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="Pincode"
+                                    name="pincode"
+                                    value={shippingDetails.pincode}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -215,6 +255,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="City"
+                                    name="city"
+                                    value={shippingDetails.city}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -224,6 +267,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="State"
+                                    name="state"
+                                    value={shippingDetails.state}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -242,7 +288,7 @@ const Orders = () => {
                     </Grid>
             </Grid>
             ) : (
-                <Cart back={true} cancelPlaceOrder={cancelPlaceOrder}/>
+                <Cart fetchAllOrders={fetchAllOrders} finalPlaceOrder={finalPlaceOrder} cartItems={cartItems} back={true} userData={userData} cancelPlaceOrder={cancelPlaceOrder} shippingDetails={shippingDetails}/>
             )}
         
         </>

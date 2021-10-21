@@ -15,7 +15,7 @@ import {
 ;
 
 import { alpha, styled } from '@mui/material/styles';
-import { getWishlist } from '../api';
+import { getWishlist, removeWishlist } from '../api';
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 const CartPaper = styled(Paper)(({ theme }) => ({

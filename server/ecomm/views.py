@@ -64,6 +64,9 @@ class OrderList(generics.ListCreateAPIView):
         order = Order.objects.create(
             user=request.user,
             shipping_address=data.get('shipping_address'),
+            city = data.get('city'),
+            state = data.get('state'),
+            pincode = data.get('pincode'),
         )
 
         orderitem_list = data.get('order_item')

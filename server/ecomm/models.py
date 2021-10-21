@@ -53,6 +53,9 @@ class Order(models.Model):
         max_length=200, null=True, choices=status_choices, default='PL')
     completed = models.BooleanField(default=False)
     shipping_address = models.CharField(max_length=1000, null=True, blank=True)
+    pincode = models.CharField(max_length=1000, null=True, blank=True)
+    city = models.CharField(max_length=1000, null=True, blank=True)
+    state = models.CharField(max_length=1000, null=True, blank=True)
 
 
 class OrderItem(models.Model):

@@ -55,11 +55,11 @@ export const updateUserData =(formData)=> API.put('/user/', formData);
 
 export const getAllOrders =(formData)=> API.get('/orders/', {params : formData});
 export const getOrder = (formData) => API.get(`/orders/${formData.id}/`);
-export const placeUserOrder = (formData) => API.get('')
+export const placeUserOrder = (formData) => API.post('/orders/', formData);
 
 export const getCartItems = (formData) => API.get('/orderitem/', formData);
-export const updateCartItem = (formData) => API.put('/orderitem/', formData);
-export const deleteCartItem = (formData) => API.delete('/orderitem/', formData);
+export const updateCartItem = (formData) => API.put(`/orderitem/${formData.id}/`, formData);
+export const deleteCartItem = (formData) => API.delete(`/orderitem/${formData.id}/`, formData);
 
 export const addItemToCart = (formData) => API.post('/orderitem/create/', formData);
 export const addItemToWishlist = (formData) => API.post('/wishlist/create/', formData);
