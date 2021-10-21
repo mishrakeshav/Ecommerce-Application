@@ -10,6 +10,6 @@ Ecommerce application developed in a span of 48 Hours during Innovathon (A 48 ho
 - SQLite
 
 ## Team 
-- <a href="https://www.linkedin.com/in/jaideep-more-a9733015a/">Jaideep Mote</a>
+- <a href="https://www.linkedin.com/in/jaideep-more-a9733015a/">Jaideep More</a>
 - <a href="https://www.linkedin.com/in/mishraharshita/">Harshita Mishra</a>
 - <a href="https://www.linkedin.com/in/keshav-mishra-912728173/">Keshav Mishra</a>
