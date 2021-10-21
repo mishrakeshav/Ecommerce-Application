@@ -7,6 +7,7 @@ app_name = 'ecomm'
 urlpatterns = [
     path('', views.home, name='home'),
     path('counts/', views.getcounts, name='getcounts'),
+    path('sales/', views.time_based_sales, name='time_based_sales'),
     path('products/', views.ProductList.as_view(), name='product_list'),
     path('products/<int:pk>/', views.ProductDetail.as_view(), name='product_detail'),
 

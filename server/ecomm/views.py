@@ -229,6 +229,19 @@ def sales(request):
     })
 
 
+@api_view(['GET'])
+def time_based_sales(request):
+    import random
+
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    data = {}
+    for day in days:
+        data[day] = [random.randint(10, 20) for i in range(10)]
+
+    return Response(data)
+
+
+
 def home(request):
     context = {}
     return render(request, 'ecomm/home.html', context)
