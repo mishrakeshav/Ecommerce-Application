@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 import {
     Paper,
@@ -16,12 +16,14 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Download';
+import PaymentDialog from '../components/PaymentDialog'
 const CartPaper = styled(Paper)(({ theme }) => ({
     padding : theme.spacing(2),
 }));
 
 
 const Cart = (props) => {
+    const [open, setOpen] = useState(false);
     const genPdf = ()=>{
         // var prtContent = document.getElementById("invoice");
         var printContents = document.getElementById("invoice").innerHTML;
@@ -143,13 +145,17 @@ const Cart = (props) => {
                     </Grid>
                 </Grid>
                 <Grid spacing={3} container>
+                <Grid item xs={12} sm={12} lg={12} align="right">
+                <PaymentDialog finalPlaceOrder={props.finalPlaceOrder} sx={{margin:'2px'}} open={open} setOpen={setOpen}/>
+                </Grid>
                     <Grid item xs={12} sm={12} lg={12} align="right">
                         {
                             props.back && (
                                 <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={props.cancelPlaceOrder}>Back</Button>
                             )
                         }
-                        <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={props.finalPlaceOrder}>Place Order</Button>
+                        
+                        <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={props.finalPlaceOrder}>Cash on Delivery</Button>
                         <Button variant="contained" sx={{background : '#3D56B2', margin:'2px'}} onClick={genPdf}><DownloadIcon/>Download Invoice</Button>
                     </Grid>
                 </Grid>

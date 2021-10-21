@@ -144,7 +144,7 @@ const Orders = () => {
         setPlaceOrder(true);
     }
     const cancelPlaceOrder = ()=>{
-        localStorage.setItem('placeOrder', 'No');
+        localStorage.setItem('placeOrder', 'NO');
         setPlaceOrder(false);
     }
     const finalPlaceOrder = async ()=>{
@@ -161,7 +161,7 @@ const Orders = () => {
             order_item : orderItems
         })
         if(data?.status===200){
-            localStorage.setItem('placeOrder', 'YES');
+            localStorage.setItem('placeOrder', 'NO');
             toast('Your order has been placed');
             navigate('/dashboard/CartNew/', { replace: true });
         }

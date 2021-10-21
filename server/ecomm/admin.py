@@ -22,9 +22,17 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_per_page = 20
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id','user','status', 'shipping_address', )
+    list_display_links = ('user','status', 'shipping_address')
+    search_fields = ('id','status', 'shipping_address')
+    list_per_page = 20
+
+
 
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Order)
+admin.site.register(models.Order, OrderAdmin)
+# admin.site.register(models.Order)
 admin.site.register(models.OrderItem)
 admin.site.register(models.Cart)
