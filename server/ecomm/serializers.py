@@ -100,6 +100,7 @@ class OrderItemCreateSerializer(serializers.ModelSerializer):
         fields = (
             'product',
             'quantity',
+           
         )
 
 
@@ -111,7 +112,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = (
             'product',
             'quantity',
-            'price'
+            'price',
+             'id'
         )
 
     def get_product(self, obj):

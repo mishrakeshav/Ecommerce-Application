@@ -21,6 +21,9 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { alpha, styled } from '@mui/material/styles';
 import { getCartItems } from '../api';
 import Cart from './Cart';
+import { toast } from 'react-toastify';
+import {getUserData,placeUserOrder} from '../api/index';
+import { useNavigate } from 'react-router';
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 const CartPaper = styled(Paper)(({ theme }) => ({
@@ -129,12 +132,33 @@ const Row = (props)=>{
 const Orders = () => {
     const [cartItems, setCartItems] = useState({results : []});
     const [placeOrder, setPlaceOrder] = useState(localStorage.getItem('placeOrder')==='YES');
+    const [shippingDetails, setShippingDetails] = useState(JSON.parse(localStorage.getItem('shippingDetails')) || {});
+    const [userData, setUserData] = useState({});
+    const navigate = useNavigate();
+    const handleShippingDetailChange = (e)=>{
+        setShippingDetails({...shippingDetails, [e.target.name]:e.target.value});
+    }
     const fetchAllOrders = async ()=>{
         const data = await getCartItems();
         console.log(data?.data);
         setCartItems(data?.data);
     }
+    
     const postPlaceOrder = ()=>{
+        if(
+            !shippingDetails.address || shippingDetails.address === '' ||
+            !shippingDetails.pincode || shippingDetails.pincode === '' ||
+            !shippingDetails.city || shippingDetails.city === '' ||
+            !shippingDetails.state || shippingDetails.state === '' 
+        ){
+            toast('Please Enter All Shipping Details');
+            return;
+        };
+        if(cartItems.results.length === 0){
+            toast('There are not items in Cart');
+            return;
+        }
+        localStorage.setItem('shippingDetails', JSON.stringify(shippingDetails));
         localStorage.setItem('placeOrder', 'YES');
         setPlaceOrder(true);
     }
@@ -142,8 +166,37 @@ const Orders = () => {
         localStorage.setItem('placeOrder', 'No');
         setPlaceOrder(false);
     }
+    const finalPlaceOrder = async ()=>{
+        let orderItems = [];
+        cartItems.results.map((value,idx)=>{
+            orderItems.push(value.id);
+        })
+        console.log(orderItems)
+        const data = await placeUserOrder({
+            shipping_address : shippingDetails.address,
+            pincode : shippingDetails.pincode,
+            city : shippingDetails.city,
+            state : shippingDetails.city,
+            order_item : orderItems
+        })
+        if(data?.status===200){
+            localStorage.setItem('placeOrder', 'No');
+            toast('Your order has been placed');
+            navigate('/dashboard/CartNew/', { replace: true });
+        }
+    }
+    const fetchUserData = async  ()=>{
+        try{
+            const data = await getUserData();
+            setUserData(data?.data);
+            console.log(data);
+        }catch(error){
+            console.log(error);
+        }
+    }
     useEffect(()=>{
     fetchAllOrders();
+    fetchUserData();
     },[])
 
      
@@ -196,6 +249,9 @@ const Orders = () => {
                                     multiline
                                     fullWidth
                                     label="Shipping Address"
+                                    name="address"
+                                    value={shippingDetails.address}
+                                    onChange={handleShippingDetailChange}
                                     rows={3}
                                 >
 
@@ -206,6 +262,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="Pincode"
+                                    name="pincode"
+                                    value={shippingDetails.pincode}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -215,6 +274,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="City"
+                                    name="city"
+                                    value={shippingDetails.city}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -224,6 +286,9 @@ const Orders = () => {
                                     variant="outlined"
                                     fullWidth
                                     label="State"
+                                    name="state"
+                                    value={shippingDetails.state}
+                                    onChange={handleShippingDetailChange}
                                 >
 
                                 </TextField>
@@ -242,7 +307,7 @@ const Orders = () => {
                     </Grid>
             </Grid>
             ) : (
-                <Cart back={true} cancelPlaceOrder={cancelPlaceOrder}/>
+                <Cart finalPlaceOrder={finalPlaceOrder} cartItems={cartItems} back={true} userData={userData} cancelPlaceOrder={cancelPlaceOrder} shippingDetails={shippingDetails}/>
             )}
         
         </>
