@@ -6,14 +6,16 @@ from rest_framework import response
 from rest_framework.response import Response
 import django_filters.rest_framework
 
-from .models import (Category, Product, Order, OrderItem, Cart)
+from .models import (Category, Product, Order, OrderItem, Cart, Wishlist)
 from .serializers import (
     ProductSerializer,
     ProductDetailSerializer,
     OrderSerializer,
     OrderItemSerializer,
     OrderItemCreateSerializer,
-    CategorySerializer
+    CategorySerializer,
+    WishlistSerializer,
+    WishlistCreateSerializer,
 )
 
 
@@ -121,6 +123,36 @@ class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderItemSerializer
 
     # TODO: Updates for the price
+
+
+class WishlistCreate(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistCreateSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        product = get_object_or_404(Product, pk=data.get('product'))
+
+        wishlist = Wishlist.objects.create(
+            user=request.user,
+            product=product,
+        )
+
+        return Response(
+            data=WishlistSerializer(wishlist).data
+        )
+
+
+class WishlistList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        wishlist = Wishlist.objects.filter(user=user).all()
+        return wishlist
 
 
 class CategoryList(generics.ListAPIView):

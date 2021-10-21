@@ -18,5 +18,9 @@ urlpatterns = [
     path('orderitem/<int:pk>/', views.OrderItemDetail.as_view(),
          name='orderitem_detail'),
 
+    path('wishlist/', views.WishlistList.as_view(), name='wishlist_list'),
+    path('wishlist/create/', views.WishlistCreate.as_view(),
+         name='wishlist_create'),
+
     path('categories/', views.CategoryList.as_view(), name='category_detail'),
 ]

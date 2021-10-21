@@ -46,12 +46,11 @@ class Order(models.Model):
         ('PK', 'PACKED'),
         ('SH', 'SHIPPED'),
         ('DL', 'DELIVERED'),
-        ('CA', 'CART'),
     )
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True)
     status = models.CharField(
-        max_length=200, null=True, choices=status_choices, default='CA')
+        max_length=200, null=True, choices=status_choices, default='PL')
     completed = models.BooleanField(default=False)
     shipping_address = models.CharField(max_length=1000, null=True, blank=True)
 
@@ -69,3 +68,7 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     order_item = models.OneToOneField(OrderItem, on_delete=models.DO_NOTHING)
 
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)

@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Order, OrderItem, Product, Category
+from .models import Order, OrderItem, Product, Category, Wishlist
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
@@ -76,7 +76,7 @@ class OrderSerializer(serializers.ModelSerializer):
         for item in order_items:
             product = get_object_or_404(Product, pk=item['product_id'])
 
-            product = serialize_product()
+            product = serialize_product(product)
 
             item['product'] = product
             del item['product_id']
@@ -127,6 +127,30 @@ class CategorySerializer(serializers.ModelSerializer):
             'id',
             'name',
         )
+
+
+class WishlistCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = (
+            'product',
+        )
+
+
+class WishlistSerializer(serializers.ModelSerializer):
+    product = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Wishlist
+        fields = (
+            'user',
+            'product',
+        )
+
+    def get_product(self, obj):
+        product = get_object_or_404(Product, pk=obj.product.id)
+        product = serialize_product(product)
+        return product
 
 
 def serialize_product(product: Product) -> dict:
