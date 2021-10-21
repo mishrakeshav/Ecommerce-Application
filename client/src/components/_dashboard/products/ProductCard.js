@@ -11,7 +11,7 @@ import ColorPreview from '../../ColorPreview';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import {addItemToCart} from '../../../api';
+import {addItemToCart, addItemToWishlist} from '../../../api';
 // ----------------------------------------------------------------------
 
 const ProductImgStyle = styled('img')({
@@ -35,6 +35,11 @@ export default function ShopProductCard({ product }) {
     toast('Item Added to Cart')
   }
 
+  const addToWishlist = async ()=>{
+    const data = await addItemToWishlist({product : product.id});
+    toast('Item Added to Wishlist')
+  }
+
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -50,12 +55,13 @@ export default function ShopProductCard({ product }) {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           {/* <ColorPreview colors={colors} /> */}
-          
+
           <Typography variant="subtitle1">
             &nbsp;
             {`${price} Rs`}
           </Typography>
           <Button variant="outlined" onClick={addToCart}>Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
+          <Button variant="outlined" onClick={addToWishlist}>Add to Wishlist <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
         </Stack>
       </Stack>
     </Card>

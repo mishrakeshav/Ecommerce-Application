@@ -62,6 +62,7 @@ export const updateCartItem = (formData) => API.put('/orderitem/', formData);
 export const deleteCartItem = (formData) => API.delete('/orderitem/', formData);
 
 export const addItemToCart = (formData) => API.post('/orderitem/create/', formData);
+export const addItemToWishlist = (formData) => API.post('/wishlist/create/', formData);
 
 
 
