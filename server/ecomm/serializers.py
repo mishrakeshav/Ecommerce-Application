@@ -147,6 +147,7 @@ class WishlistSerializer(serializers.ModelSerializer):
         fields = (
             'user',
             'product',
+            'id',
         )
 
     def get_product(self, obj):
