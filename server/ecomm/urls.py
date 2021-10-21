@@ -21,6 +21,8 @@ urlpatterns = [
     path('wishlist/', views.WishlistList.as_view(), name='wishlist_list'),
     path('wishlist/create/', views.WishlistCreate.as_view(),
          name='wishlist_create'),
+    path('wishlist/<int:pk>/', views.WishlistDetail.as_view(),
+         name='wishlist_detail'),
 
     path('categories/', views.CategoryList.as_view(), name='category_detail'),
 ]

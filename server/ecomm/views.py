@@ -155,6 +155,12 @@ class WishlistList(generics.ListAPIView):
         return wishlist
 
 
+class WishlistDetail(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+
+
 class CategoryList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Category.objects.all()
