@@ -104,6 +104,9 @@ class OrderItemCreate(generics.CreateAPIView):
         data = request.data
         product = get_object_or_404(Product, pk=data.get('product'))
 
+        product.quantity = product.quantity - 1
+        product.save()
+
         order_item = OrderItem.objects.create(
             product=product,
             quantity=int(data.get('quantity')),
@@ -121,6 +124,18 @@ class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        product = get_object_or_404(Product, pk=instance.product.id)
+        product.quantity += instance.quantity
+        product.save()
+
+        cart = Cart.objects.filter(order_item=instance).first()
+        cart.delete()
+
+        return super().delete(request, *args, **kwargs)
 
     # TODO: Updates for the price
 
