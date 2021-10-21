@@ -15,7 +15,7 @@ import {
 ;
 
 import { alpha, styled } from '@mui/material/styles';
-import { getAllOrders } from '../api';
+import { getWishlist, removeWishlist } from '../api';
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 const CartPaper = styled(Paper)(({ theme }) => ({
@@ -24,31 +24,15 @@ const CartPaper = styled(Paper)(({ theme }) => ({
 
 const Row = (props)=>{
     console.log('here');
+
     const [edit, setEdit] = useState(false);
-    const [quantity, setQuantity] = useState(0);
     const handleEdit = ()=>{
         setEdit(true);
     }
     const handleDelete = ()=>{
         setEdit(false);
     }
-    const handleUpdate = ()=>{
-        setEdit(false)
-    }
-    // const handleU
-    let order_status;
-    if(props.order.status == 'DL'){
-        order_status = 'Delivered'
-    }else if(props.order.status == 'CA'){
-        order_status = 'In Cart';
-    }else if(props.order.status == 'PL'){
-        order_status = 'Placed';
-    }else if(props.order.status == 'PK'){
-        order_status = 'Packed';
-    }else if(props.order.status == 'SH'){
-        order_status = 'Shipped';
-    }
-      
+
     return (
         <>
         {
@@ -60,28 +44,10 @@ const Row = (props)=>{
                         {props.order?.id}
                     </TableCell> */}
                     <TableCell>
-                        <TextField
-                            variant="outlined"
-                            fullwdith
-                            size="small"
-                            label="Quantity"
-                            type="number"
-                            value={quantity}
-                            onChange={(e)=>{
-                                setQuantity(e.target.value);
-                            }}
-                        />
+                        {props.order?.product?.price}
                     </TableCell>
                     <TableCell>
-                        {props.order?.price}
-                    </TableCell>
-                    <TableCell>
-                    {props.order?.category}
-                    </TableCell>
-                    <TableCell>
-                        <Button variant="outlined" sx={{color:'#193498', borderColor:'#193498'}}>
-                            Update
-                        </Button>
+                    {props.order?.product?.category}
                     </TableCell>
                     <TableCell><Button onClick={handleDelete}>Cancel</Button></TableCell>
             </TableRow>
@@ -89,38 +55,38 @@ const Row = (props)=>{
             ): (
                 <TableRow>
                     <TableCell>{props.idx+1}</TableCell>
-                    <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell>
-                    <TableCell>{props.order?.id}</TableCell>
-                    {/* <TableCell>{order_status}</TableCell> */}
-                    <TableCell>3</TableCell>
-                    <TableCell>{props.order?.price}</TableCell>
+                    <TableCell> <img width="150px" src={ 'http://localhost:8000' +  props.order?.product?.image } /></TableCell>
+                    <TableCell>{props.order?.product?.id}</TableCell>
+                    <TableCell>{props.order?.product?.price}</TableCell>
                     <TableCell>Category</TableCell>
-                    <TableCell>{props.order?.shipping_address}</TableCell>
                     {/* <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell> */}
                     <TableCell><Button onClick={handleDelete}>DELETE</Button></TableCell>
 
                 </TableRow>
-            )   
+            )
         }
         </>
-        
+
     )
 }
 
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
-    // const fetchAllOrders = async ()=>{
-        
-    //     const data = await getAllOrders();
-    //     console.log(data?.data);
-    //     setOrders(data?.data);
-    //   }
-    // useEffect(()=>{
-    // fetchAllOrders();
-    // },[])
 
-     
+    const fetchWishlist = async ()=>{
+        const data = await getWishlist();
+        console.log('Got Wishlist: ')
+        console.log(data?.data?.results);
+        setOrders(data?.data?.results);
+      }
+    useEffect(
+        ()=>{
+            fetchWishlist();
+    },
+    [])
+
+
 
     return (
         <CartPaper elevation={15}>
@@ -135,13 +101,10 @@ const Orders = () => {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell> #</TableCell>
-                                            <TableCell>Order Image</TableCell>
-                                            <TableCell>Order ID</TableCell>                                      
-                                            {/* <TableCell>Order Status</TableCell> */}
-                                            <TableCell>Total Items</TableCell>
-                                            <TableCell>Total Cost</TableCell>
+                                            <TableCell>Product Image</TableCell>
+                                            <TableCell>Product ID</TableCell>
+                                            <TableCell>Product Cost</TableCell>
                                             <TableCell> Category </TableCell>
-                                            <TableCell> Shipping Address </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -150,8 +113,8 @@ const Orders = () => {
                                                 <Row order={value} idx={idx}/>
                                             ))
                                         }
-                                        
-                                   
+
+
                                     </TableBody>
                                 </Table>
                             </TableContainer>
