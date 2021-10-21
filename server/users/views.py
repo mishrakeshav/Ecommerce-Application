@@ -1,9 +1,10 @@
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from rest_framework import permissions
+from rest_framework import permissions, status
+from rest_framework.response import Response
 
-from .serializers import UserSerializer,NewUserSerializer
+from .serializers import UserSerializer, NewUserSerializer
 from .models import Profile
 
 
@@ -22,7 +23,6 @@ class UserCreate(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = User.objects.all()
     serializer_class = NewUserSerializer
-
 
 
 class UserList(generics.ListAPIView):

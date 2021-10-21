@@ -86,7 +86,7 @@ class OrderSerializer(serializers.ModelSerializer):
     def get_total_price(self, obj):
         order_id = obj.id
         order_items = OrderItem.objects.filter(order=order_id).all()
-        return sum(item.price for item in order_items)
+        return sum(item.price * item.quantity for item in order_items)
 
     def get_total_items(self, obj):
         order_id = obj.id
@@ -100,7 +100,7 @@ class OrderItemCreateSerializer(serializers.ModelSerializer):
         fields = (
             'product',
             'quantity',
-           
+
         )
 
 
@@ -113,7 +113,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product',
             'quantity',
             'price',
-             'id'
+            'id'
         )
 
     def get_product(self, obj):

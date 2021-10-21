@@ -36,15 +36,12 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 const TOTAL = 234;
 
-export default function AppBugReports() {
+export default function AppBugReports(props) {
   return (
     <RootStyle>
-      <IconWrapperStyle>
-        <Icon icon={bugFilled} width={24} height={24} />
-      </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{props.counts.total_orders}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Bug Reports
+        Total Orders
       </Typography>
     </RootStyle>
   );

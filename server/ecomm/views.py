@@ -1,7 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import get_object_or_404, render
-from django.views import generic
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, status
+from rest_framework.decorators import api_view
+
 from rest_framework import response
 from rest_framework.response import Response
 import django_filters.rest_framework
@@ -64,9 +66,9 @@ class OrderList(generics.ListCreateAPIView):
         order = Order.objects.create(
             user=request.user,
             shipping_address=data.get('shipping_address'),
-            city = data.get('city'),
-            state = data.get('state'),
-            pincode = data.get('pincode'),
+            city=data.get('city'),
+            state=data.get('state'),
+            pincode=data.get('pincode'),
         )
 
         orderitem_list = data.get('order_item')
@@ -140,7 +142,22 @@ class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return super().delete(request, *args, **kwargs)
 
-    # TODO: Updates for the price
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        product = get_object_or_404(Product, pk=instance.product.id)
+
+        data = self.request.data
+        product.quantity += instance.quantity
+
+        if data.get('quantity') > product.quantity:
+            return Response(data="Quantity Exceeded", status=status.HTTP_400_BAD_REQUEST)
+
+        product.quantity -= data['quantity']
+        product.save()
+
+        self.request.data['price'] = product.price
+
+        return super().put(request, *args, **kwargs)
 
 
 class WishlistCreate(generics.CreateAPIView):
@@ -183,6 +200,33 @@ class CategoryList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+@api_view(['GET'])
+def getcounts(request):
+    total_products = Product.objects.count()
+    total_orders = Order.objects.filter(status = 'PL').count()
+    total_delivered = Order.objects.filter(status='DL').count()
+    total_customers = User.objects.count()
+    return Response({
+        "total_customers" : total_customers,
+        "total_delivered" : total_delivered,
+        "total_orders" : total_orders,
+        "total_products" : total_products
+    })
+
+@api_view(['GET'])
+def sales(request):
+    total_products = Product.objects.count()
+    total_orders = Order.objects.filter(status = 'PL').count()
+    total_delivered = Order.objects.filter(status='DL').count()
+    total_customers = User.objects.count()
+    return Response({
+        "total_customers" : total_customers,
+        "total_delivered" : total_delivered,
+        "total_orders" : total_orders,
+        "total_products" : total_products
+    })
 
 
 def home(request):

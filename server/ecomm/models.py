@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields.related import create_many_to_many_intermediary_model
-
+from datetime import datetime
 
 class Category(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -56,6 +56,7 @@ class Order(models.Model):
     pincode = models.CharField(max_length=1000, null=True, blank=True)
     city = models.CharField(max_length=1000, null=True, blank=True)
     state = models.CharField(max_length=1000, null=True, blank=True)
+    created_at = models.DateTimeField(default=datetime.now)
 
 
 class OrderItem(models.Model):
