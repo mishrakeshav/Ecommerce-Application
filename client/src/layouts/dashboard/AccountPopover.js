@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -10,8 +10,7 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 // components
 import MenuPopover from '../../components/MenuPopover';
 //
-import account from '../../_mocks_/account';
-
+import { getUserData } from '../../api';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -37,13 +36,31 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-
+  const [account, setAccount] = useState({
+    first_name : '',
+    last_name : '',
+    email : '',
+    username : '',
+    address : '',
+});
+  const fetchAccount = async ()=>{
+        const data = await getUserData();
+        console.log(data);
+        setAccount(data?.data);
+  }
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  const handleLogout = ()=>{
+    localStorage.removeItem('auth');
+    window.location.href = '/login'
+  }
+  useEffect(()=>{
+    fetchAccount();
+  },[])
 
   return (
     <>
@@ -67,7 +84,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={'/static/mock-images/avatars/avatar_default.jpg'} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -78,7 +95,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {account.first_name} {account.last_name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {account.email}
@@ -86,8 +103,8 @@ export default function AccountPopover() {
         </Box>
 
         <Divider sx={{ my: 1 }} />
-
-        {MENU_OPTIONS.map((option) => (
+{/* 
+        {['Logout'].map((option) => (
           <MenuItem
             key={option.label}
             to={option.linkTo}
@@ -107,10 +124,10 @@ export default function AccountPopover() {
 
             {option.label}
           </MenuItem>
-        ))}
+        ))} */}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" variant="outlined" onClick={handleLogout}>
             Logout
           </Button>
         </Box>

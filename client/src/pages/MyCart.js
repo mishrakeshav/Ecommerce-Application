@@ -37,7 +37,7 @@ const Row = (props)=>{
     const [quantity, setQuantity] = useState(props.order.quantity);
     const handleEdit = async ()=>{
         try{
-            const data = await updateCartItem({quantity, price : props.order.price, id : props.order.id});
+            const data = await updateCartItem({quantity:parseInt(quantity), price : props.order.price, id : props.order.id});
             
             toast('Order Item Updated');
             window.location.reload();
