@@ -91,16 +91,16 @@ const Row = (props)=>{
                     <TableCell>{props.idx+1}</TableCell>
                     <TableCell> <img width="150px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"/></TableCell>
                     <TableCell>{props.order?.id}</TableCell>
-                    <TableCell>{order_status}</TableCell>
+                    {/* <TableCell>{order_status}</TableCell> */}
                     <TableCell>3</TableCell>
                     <TableCell>{props.order?.price}</TableCell>
                     <TableCell>Category</TableCell>
                     <TableCell>{props.order?.shipping_address}</TableCell>
-                    <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell>
+                    {/* <TableCell><Button onClick={handleEdit}>EDIT</Button></TableCell> */}
                     <TableCell><Button onClick={handleDelete}>DELETE</Button></TableCell>
 
                 </TableRow>
-            )
+            )   
         }
         </>
         
@@ -135,10 +135,9 @@ const Orders = () => {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell> #</TableCell>
-                                            {/* <TableCell></TableCell> */}
                                             <TableCell>Order Image</TableCell>
                                             <TableCell>Order ID</TableCell>                                      
-                                            <TableCell>Order Status</TableCell>
+                                            {/* <TableCell>Order Status</TableCell> */}
                                             <TableCell>Total Items</TableCell>
                                             <TableCell>Total Cost</TableCell>
                                             <TableCell> Category </TableCell>
