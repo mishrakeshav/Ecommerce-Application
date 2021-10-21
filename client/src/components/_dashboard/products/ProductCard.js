@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -9,6 +10,8 @@ import { fCurrency } from '../../../utils/formatNumber';
 import Label from '../../Label';
 import ColorPreview from '../../ColorPreview';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
+import heartOutline from '@iconify/icons-eva/heart-outline';
+import heartFill from '@iconify/icons-eva/heart-fill';
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
 import {addItemToCart, addItemToWishlist} from '../../../api';
@@ -58,10 +61,10 @@ export default function ShopProductCard({ product }) {
 
           <Typography variant="subtitle1">
             &nbsp;
-            {`${price} Rs`}
+            {`₹ ${price} `}
           </Typography>
-          <Button variant="outlined" onClick={addToCart}>Add to Cart <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
-          <Button variant="outlined" onClick={addToWishlist}>Add to Wishlist <Icon icon={shoppingCartFill} width={24} height={24} /></Button>
+          <Button variant="outlined" onClick={addToCart}><Icon icon={shoppingCartFill} width={24} height={24} /></Button>
+          <Button variant="outlined" onClick={addToWishlist}><Icon icon={heartOutline} width={24} height={24} /></Button>
         </Stack>
       </Stack>
     </Card>

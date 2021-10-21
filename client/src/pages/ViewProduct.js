@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import ShareIcon from '@mui/icons-material/Share';
 import Barcode from 'react-barcode';
 import { getProduct } from 'src/api/auth';
+import {addItemToCart, addItemToWishlist} from 'src/api/index.js';
 
 const ViewProduct = () => {
     const [product, setProduct] = useState({});
@@ -26,6 +27,14 @@ const ViewProduct = () => {
     useEffect(()=>{
         fetchProduct();
     },[])
+    const addToCart = async ()=>{
+        const data = await addItemToCart({product : product.id, quantity : 1});
+        toast('Item Added to Cart')
+      }
+    const addToWishlist = async ()=>{
+        const data = await addItemToWishlist({product : product.id});
+        toast('Item Added to Wishlist')
+      }
     return (
         <div>
             <Grid  container spacing={3} sx={{padding : '10px'}}>
@@ -100,12 +109,12 @@ const ViewProduct = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} lg={6}>
                     <Button variant="contained" fullWidth my={1} sx={{padding:'10px', background : '#5C7AEA'}}> 
-                        <Typography variant="h5">Add to Cart</Typography>
+                        <Typography variant="h5" onClick={addToCart}>Add to Cart</Typography>
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={12} lg={6}>
                     <Button variant="contained" fullWidth  sx={{padding:'10px'}} > 
-                        <Typography variant="h5" >Add to Wishlist  </Typography>
+                        <Typography variant="h5" onClick={addToWishlist} >Add to Wishlist  </Typography>
                     </Button>
                 </Grid>
                 <Grid item xs={12} sm={12} lg={6}>
